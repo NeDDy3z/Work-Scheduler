@@ -1,0 +1,198 @@
+.calendar-selection {
+    display: flex;
+    justify-content: center;
+}
+
+.calendar-selection * {
+    margin: 1rem;
+    padding: .2rem;
+
+    font-size: 1.2rem;
+
+    border: none;
+    border-bottom: 2px solid var(--text);
+    background: var(--background);
+    color: white;
+}
+
+.calendar-selection *:focus {
+    outline: none;
+    border-bottom-color: var(--button);
+}
+
+.calendar-selection input {
+    width: 5rem;
+}
+
+
+
+
+
+/* CALENDAR */
+.calendar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar table {
+    width: 100vw;
+    max-width: 40rem;
+
+    align-self: center;
+
+    border-radius: 1rem;
+    border-spacing: 0;
+    background-color: #3a3838;
+    border: solid 5px #0f172a;
+}
+
+tr, td, th {
+    width: 8rem;
+    height: 4rem;
+
+    margin: 0;
+    padding: 0;
+
+    border: solid 2px #2525253a;
+}
+
+thead tr, thead th {
+    height: 1rem;
+}
+
+thead {
+    background-color: #0d0d0d60;
+}
+
+td button {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+    border: none;
+    background: none;
+    color: white;
+
+    transition: color 0.3s ease;
+
+}
+
+td button:hover {
+    background-color: rgba(13, 13, 13, 0.2);
+}
+
+td button:focus, td button:active {
+    outline: none;
+    outline: solid 2px var(--button);
+    border-radius: .2rem;
+}
+
+
+td button .day {
+    text-align: left;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 1.2rem;
+
+    color: gray;
+}
+
+td button div {
+    padding: 0;
+    margin: 0;
+
+    margin-top: -.6rem;
+}
+
+
+
+
+
+
+
+/* Event Editor */
+#event-container {
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 2rem;
+
+    width: 15rem;
+}
+
+#event-container #event-basics {
+    display: flex;
+    justify-content: space-between;
+}
+
+#event-container #event-close {
+    background: none;
+    border: none;
+
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+
+    color: var(--button);
+}
+
+
+
+#event-container #event-time {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#event-container #event-time p {
+    font-weight: bold;
+}
+
+#event-container .event-time-input {
+    padding: .5rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--text);
+
+    font-family: var(--current-global-font);
+    font-size: 18px;
+    color: white;
+}
+
+#event-container .event-time-input:focus {
+    outline: none;
+}
+
+
+
+#event-container #event-controls {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#event-container .event-button {
+    padding: .5rem;
+
+    border: none;
+    outline: none;
+    transition: color 0.3s ease;
+    background-color: rgba(0, 0, 0, 0);
+
+    font-family: var(--current-global-font);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+#event-container .event-button:hover, #event-container .event-button:focus {
+    color: var(--button);
+}

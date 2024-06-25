@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<%# Import <head></head> %>
+<%- include('../partials/head'); %>
+<body>
+<header class="title-container">
+    <h1>Work Scheduler</h1>
+</header>
+<main>
+    <div class="calendar-selection">
+        <input type="number" id="year" maxlength="4" min="2023" max="2030" onchange="generateCalendar()">
+        <select id="month" onchange="generateCalendar()">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+    </div>
+
+    <div class="calendar">
+        <table>
+            <thead>
+            <tr>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+            </tr>
+            </thead>
+            <tbody id="calendar-body">
+            <tr>
+                <td>
+                    <button>
+                        <p>1</p>
+                        <div>
+                            <p class="time-from">10:00</p>
+                            <p class="time-to">18:00</p>
+                        </div>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="event-container" style="display: none;">
+            <div id="event-basics">
+                <p id="event-date">Sun 12 July 2024</p>
+                <button onclick="closeEvent()" id="event-close">X</button>
+            </div>
+            <div id="event-time">
+                <input type="time" id="event-time-from" class="event-time-input" name="event-time-from" placeholder="10:00">
+                <p>_</p>
+                <input type="time" id="event-time-to" class="event-time-input" name="event-time-from" value="18:00" >
+            </div>
+            <div id="event-controls">
+                <button class="event-button">Delete</button>
+                <button class="event-button">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="toggleEvents()" id="login-submit" style="color: gray; font-size: 10px">Toggle debug</button>
+    <div id="events-debug" style="display: none;">
+        <%# Display events %>
+        <% if (typeof events !== 'undefined') {
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i]; %>
+        <div style="display: flex; justify-content: space-between; width: 10rem;">
+            <p><%= event.start.date %></p>
+            <p><%= event.summary %></p>
+        </div>
+        <% }
+        } %>
+    </div>
+</main>
+<%# Import <footer></footer> %>
+<%- include('../partials/footer'); %>
+
+<script src="js/schedule-script.js"></script>
+<script>
+    const debug = document.getElementById('events-debug');
+    let visible = false
+    function toggleEvents() {
+        if (visible) {
+            debug.style.display = 'none';
+            visible = false;
+        } else {
+            debug.style.display = 'block';
+            visible = true;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
+
+:root {
+    /*--current-global-font: "Roboto Slab", serif;*/
+    --current-global-font: "Outfit", sans-serif;
+    --background: #0f172a;
+    --text: #e6eaf6;
+    --button: #6c49c4;
+}
+
+* { /* Reset CSS */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--current-global-font);
+    color: white;
+    background-color: var(--background);
+}
+
+
+header {
+    width: 100vw;
+    padding: 2rem;
+}
+
+footer {
+    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+
+    color: #294943;
+}
+
+#login-error {
+    text-align: center;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    width: 20rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form > * {
+    margin: 1rem;
+}
+
+
+h1, h4 {
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+}
+
+#password {
+    padding: .5rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--text);
+
+    font-family: var(--current-global-font);
+    font-size: 18px;
+    color: white;
+}
+
+#password:focus {
+    outline: none;
+}
+
+#login-submit {
+    padding: .5rem;
+
+    border: none;
+    outline: none;
+    transition: color 0.3s ease;
+    background-color: rgba(0, 0, 0, 0);
+
+    font-family: var(--current-global-font);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+#login-submit:hover, #login-submit:focus {
+    color: var(--button);
+}
+
+
+/* Screen responsivnes */
+@media screen and (min-width: 30rem) {
+    .login-form {
+        width: 20rem;
+        flex-direction: row;
+    }
+
+    #password {
+        width: 11rem;
+    }
+
+    #login-submit {
+        width: 9rem;
+    }
+}
+  
