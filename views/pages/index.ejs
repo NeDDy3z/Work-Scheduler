@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="cs">
+<%# Import <head></head> %>
+<%- include('../partials/head'); %>
+<body>
+<header class="title-container">
+    <h1>Work Scheduler</h1>
+    <h4>DESIGNPROPAGANDA</h4>
+</header>
+<main>
+    <div class="login-container">
+        <%# Display error message %>
+        <% if (typeof msg !== 'undefined') { %>
+            <p id="login-error" style="color: red;"><%= msg %></p>
+        <% } %>
+        <form method="post" id="login" class="login-form">
+            <input type="password" name="password" id="password" placeholder="Password" minlength="1" maxlength="50">
+            <button type="submit" id="login-submit">Log-In</button>
+        </form>
+    </div>
+</main>
+<%# Import <footer></footer> %>
+<%- include('../partials/footer'); %>
+</body>
+</html>
