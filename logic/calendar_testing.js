@@ -1,10 +1,8 @@
-// https://developers.google.com/calendar/quickstart/node
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
 const {authenticate} = require('@google-cloud/local-auth');
 const {google} = require('googleapis');
-const {get} = require("axios");
 
 
 
@@ -15,10 +13,7 @@ const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 
 
-/**
- * Reads previously authorized credentials from the save file.
- * @return {Promise<OAuth2Client|null>}
- */
+// Load Credentials from token.json
 async function loadSavedCredentialsIfExist() {
     try {
         const content = await fs.readFile(TOKEN_PATH);
@@ -29,11 +24,7 @@ async function loadSavedCredentialsIfExist() {
     }
 }
 
-/**
- * Serializes credentials to a file compatible with GoogleAuth.fromJSON.
- * @param {OAuth2Client} client
- * @return {Promise<void>}
- */
+// Save credentials to token.json
 async function saveCredentials(client) {
     const content = await fs.readFile(CREDENTIALS_PATH);
     const keys = JSON.parse(content);
@@ -47,9 +38,7 @@ async function saveCredentials(client) {
     await fs.writeFile(TOKEN_PATH, payload);
 }
 
-/**
- * Load or request or authorization to call APIs.
- */
+// Load or request or authorization to call APIs.
 async function authorize() {
     let client = await loadSavedCredentialsIfExist();
     if (client) {
@@ -67,77 +56,39 @@ async function authorize() {
 
 
 
-/**
- * Lists the next 30 events on the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-async function fetchEvents() {
-    const auth = await authorize();
 
-    const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.list({
-        calendarId: 'primary',//'954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com',
-        timeMin: new Date().toISOString(), // ! Od dnešního dne
-        maxResults: 30,
-        singleEvents: true,
-        orderBy: 'startTime',
-    });
-    const events = res.data.items;
-    if (!events || events.length === 0) {
-        console.log('No upcoming events found.');
-        return;
-    }
-    console.log("Events requested: %s", events.length);
 
-    return events;
-}
 
-/**
- * Inserts an event into the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- * @param {Object} event The event to insert.
- */
-async function postEvent(event) {
-    const auth = await authorize();
-
-    console.log(event);
-
-    const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.insert ({
-        calendarId: 'primary',
-        resource: event
-    });
-
-    console.log("Event created: %s", res.data.htmlLink);
-}
-
-/*
 const event = {
-    'summary': 'Erik',
-    'description': '10:00;18:00', // 10:00 - 18:00
+    'summary': 'Google I/O 2015',
+    'location': '800 Howard St., San Francisco, CA 94103',
+    'description': 'A chance to hear more about Google\'s developer products.',
     'start': {
-        'date': '2024-06-01',
+        'dateTime': '2024-06-28T09:00:00-07:00',
+        'timeZone': 'America/Los_Angeles',
     },
     'end': {
-        'date': '2024-06-01',
-    },
+        'dateTime': '2028-06-28T17:00:00-07:00',
+        'timeZone': 'America/Los_Angeles',
+    }
 };
-*/
-
-//authorize().then(auth => insertEvent(auth, event)).catch(console.error);
-//authorize().then(auth => getEvents(auth)).catch(console.error);
 
 
 
-function getEvents() {
-    return authorize().then(auth => fetchEvents(auth)).catch(console.error);
+async function addEvent(auth) {
+    const calendar = google.calendar({version: 'v3', auth});
+    const res = await calendar.events.insert({
+        auth: auth,
+        calendarId: 'primary',
+        resource: event,
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+    });
 }
 
-function insertEvent(event) {
-    return authorize().then(auth => postEvent(auth, event)).catch(console.error);
-}
+authorize().then(addEvent).catch(console.error);
 
-
-
-
-module.exports = { getEvents, insertEvent }
