@@ -4,13 +4,13 @@
 <%- include('../partials/head'); %>
 <body>
 <header class="title-container">
-    <h1>Work Scheduler</h1>
+    <h1><a href="">Work Scheduler</a></h1>
 </header>
 <main>
     <div class="calendar-selection">
-        <input type="number" id="year" maxlength="4" min="2023" max="2030" onchange="generateCalendar()">
+        <input type="number" id="year" maxlength="4" min="2023" max="2030" value="2023" onchange="generateCalendar()">
         <select id="month" onchange="generateCalendar()">
-            <option value="1">January</option>
+            <option value="1" selected>January</option>
             <option value="2">February</option>
             <option value="3">March</option>
             <option value="4">April</option>
@@ -39,43 +39,37 @@
             </tr>
             </thead>
             <tbody id="calendar-body">
-            <tr>
-                <td>
-                    <button>
-                        <p>1</p>
-                        <div>
-                            <p class="time-from">10:00</p>
-                            <p class="time-to">18:00</p>
-                        </div>
-                    </button>
-                </td>
-            </tr>
             </tbody>
         </table>
+        <button id="export" type="submit" formmethod="get" formaction="/export">Export</button>
 
         <div id="event-container" style="display: none;">
-            <div id="event-basics">
-                <p id="event-date">Sun 12 July 2024</p>
-                <button onclick="closeEvent()" id="event-close">X</button>
-            </div>
-            <div id="event-time">
-                <input type="time" id="event-time-from" class="event-time-input" name="event-time-from" placeholder="10:00">
-                <p>_</p>
-                <input type="time" id="event-time-to" class="event-time-input" name="event-time-from" value="18:00" >
-            </div>
-            <div id="event-controls">
-                <button class="event-button">Delete</button>
-                <button class="event-button">Save</button>
-            </div>
+            <form action="">
+                <div id="event-basics">
+                    <p id="event-date-p" name="event-date-p"></p>
+                    <input type="text" id="event-date" name="date" hidden>
+                    <button onclick="closeEvent()" id="event-close">X</button>
+                </div>
+                <div id="event-time">
+                    <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="20:00" required>
+                    <p>_</p>
+                    <input type="time" id="event-time-to" class="event-time-input" name="to" min="09:00" max="20:00" required>
+                </div>
+                <div id="event-controls">
+                    <button type="submit" id="event-add" class="event-button" formmethod="post" formaction="schedule/event">Add</button>
+                    <button type="submit" id="event-delete" class="event-button" formmethod="delete" formaction="schedule/event">Delete</button>
+                    <button type="submit" id="event-update" class="event-button" formmethod="put" formaction="schedule/event">Update</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <button onclick="toggleEvents()" id="login-submit" style="color: gray; font-size: 10px">Toggle debug</button>
     <div id="events-debug" style="display: none;">
         <%# Display events %>
-        <% if (typeof events !== 'undefined') {
-        for (var i = 0; i < events.length; i++) {
-            var event = events[i]; %>
+        <% if (typeof data !== 'undefined') {
+        for (var i = 0; i < data.length; i++) {
+            var event = data[i]; %>
         <div style="display: flex; justify-content: space-between; width: 10rem;">
             <p><%= event.start.date %></p>
             <p><%= event.summary %></p>
@@ -84,11 +78,13 @@
         } %>
     </div>
 </main>
-<%# Import <footer></footer> %>
-<%- include('../partials/footer'); %>
 
-<script src="js/schedule-script.js"></script>
 <script>
+    // Load events from server to access it via JS
+    const events = JSON.parse('<%- JSON.stringify(data).replace(/&quot;/g, '\\"') %>');
+
+
+    // Open close debug events
     const debug = document.getElementById('events-debug');
     let visible = false
     function toggleEvents() {
@@ -101,5 +97,6 @@
         }
     }
 </script>
+<script src="js/schedule-script.js"></script>
 </body>
 </html>
