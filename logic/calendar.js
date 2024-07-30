@@ -1,10 +1,8 @@
-// https://developers.google.com/calendar/quickstart/node
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
 const {authenticate} = require('@google-cloud/local-auth');
 const {google} = require('googleapis');
-const {get} = require("axios");
 
 
 
@@ -13,12 +11,12 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
+// Calendar ID
+const calendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
 
 
-/**
- * Reads previously authorized credentials from the save file.
- * @return {Promise<OAuth2Client|null>}
- */
+
+// Load Credentials from token.json
 async function loadSavedCredentialsIfExist() {
     try {
         const content = await fs.readFile(TOKEN_PATH);
@@ -29,11 +27,7 @@ async function loadSavedCredentialsIfExist() {
     }
 }
 
-/**
- * Serializes credentials to a file compatible with GoogleAuth.fromJSON.
- * @param {OAuth2Client} client
- * @return {Promise<void>}
- */
+// Save credentials to token.json
 async function saveCredentials(client) {
     const content = await fs.readFile(CREDENTIALS_PATH);
     const keys = JSON.parse(content);
@@ -47,9 +41,7 @@ async function saveCredentials(client) {
     await fs.writeFile(TOKEN_PATH, payload);
 }
 
-/**
- * Load or request or authorization to call APIs.
- */
+// Load or request or authorization to call APIs.
 async function authorize() {
     let client = await loadSavedCredentialsIfExist();
     if (client) {
@@ -67,18 +59,20 @@ async function authorize() {
 
 
 
-/**
- * Lists the next 30 events on the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-async function fetchEvents() {
-    const auth = await authorize();
+// Get events
+async function getEventsAPI(auth, year, month) {
+    if (!year || !month) {
+        year = new Date().getFullYear();
+        month = new Date().getMonth() + 1;
+    }
+
+    //const auth = await authorize();
 
     const calendar = google.calendar({version: 'v3', auth});
     const res = await calendar.events.list({
-        calendarId: 'primary',//'954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com',
-        timeMin: new Date().toISOString(), // ! Od dnešního dne
-        maxResults: 30,
+        calendarId: calendarId,
+        timeMin: new Date(year, month - 1, 1).toISOString(),
+        maxResults: 31,
         singleEvents: true,
         orderBy: 'startTime',
     });
@@ -92,52 +86,58 @@ async function fetchEvents() {
     return events;
 }
 
-/**
- * Inserts an event into the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- * @param {Object} event The event to insert.
- */
-async function postEvent(event) {
+// Add event
+async function addEventAPI(event) {
     const auth = await authorize();
 
-    console.log(event);
+    const calendar = google.calendar({version: 'v3', auth});
+    const res = await calendar.events.insert({
+        auth: auth,
+        calendarId: calendarId,
+        resource: event,
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log("Event created");
+    });
+}
+
+async function deleteEventAPI(id) {
+    const auth = await authorize();
 
     const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.insert ({
-        calendarId: 'primary',
-        resource: event
+    const res = await calendar.events.delete({
+        auth: auth,
+        calendarId: calendarId,
+        eventId: id,
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log("Event deleted");
     });
-
-    console.log("Event created: %s", res.data.htmlLink);
-}
-
-/*
-const event = {
-    'summary': 'Erik',
-    'description': '10:00;18:00', // 10:00 - 18:00
-    'start': {
-        'date': '2024-06-01',
-    },
-    'end': {
-        'date': '2024-06-01',
-    },
-};
-*/
-
-//authorize().then(auth => insertEvent(auth, event)).catch(console.error);
-//authorize().then(auth => getEvents(auth)).catch(console.error);
-
-
-
-function getEvents() {
-    return authorize().then(auth => fetchEvents(auth)).catch(console.error);
-}
-
-function insertEvent(event) {
-    return authorize().then(auth => postEvent(auth, event)).catch(console.error);
 }
 
 
 
 
-module.exports = { getEvents, insertEvent }
+function getEvents(year, month) {
+    return authorize().then(auth => getEventsAPI(auth, year, month)).catch(console.error);
+}
+
+function addEvent(event) {
+    authorize().then(addEventAPI(event)).catch(console.error);
+}
+
+function deleteEvent(id) {
+    authorize().then(deleteEventAPI(id)).catch(console.error);
+}
+
+
+
+
+
+module.exports = { getEvents, addEvent, deleteEvent }

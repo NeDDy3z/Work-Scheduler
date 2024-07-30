@@ -3,7 +3,7 @@
     justify-content: center;
 }
 
-.calendar-selection * {
+.calendar-selection form * {
     margin: 1rem;
     padding: .2rem;
 
@@ -15,14 +15,23 @@
     color: white;
 }
 
+.calendar-selection input[type=number] {
+    width: 4rem;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .calendar-selection *:focus {
     outline: none;
     border-bottom-color: var(--button);
 }
 
-.calendar-selection input {
-    width: 5rem;
-}
 
 
 
@@ -117,6 +126,13 @@ td button div {
 
 
 
+/* TOOLS */
+#calendar-tools {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
 
 
 /* Event Editor */
@@ -182,7 +198,7 @@ td button div {
     justify-content: space-evenly;
 }
 
-#event-container .event-button, #export {
+.calendar-input-button, .calendar-input-button {
     width: 5rem;
     padding: .5rem;
     margin: 0 1.6rem;
@@ -198,6 +214,6 @@ td button div {
     color: var(--text);
 }
 
-#event-container .event-button:hover, #event-container .event-button:focus, #export:hover, #export:focus {
+.calendar-input-button:hover, .calendar-input-button:focus {
     color: var(--button);
 }
