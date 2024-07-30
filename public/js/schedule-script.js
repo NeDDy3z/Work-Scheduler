@@ -13,8 +13,8 @@ const eventId = document.getElementById('event-id');
 const eventTimeFrom = document.getElementById('event-time-from');
 const eventTimeTo = document.getElementById('event-time-to');
 
+const reportTable = document.getElementById('report-table');
 
-// Set default values based on a current date
 
 
 // Generate
@@ -32,6 +32,7 @@ window.onload = () => {
 
     generateCalendar();
 };
+
 
 
 
@@ -64,7 +65,7 @@ function generateCalendar() {
     currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1);
 
 
-
+    let hour_count = 0;
     // Fill calendar
     while (currentDate <= endDate || currentDate.getDay() !== 1) {
         const weekRow = document.createElement('tr');
@@ -90,9 +91,11 @@ function generateCalendar() {
                 button.append(day);
                 button.addEventListener('click', openEvent.bind(this, button));
 
+
                 // Set data
                 if (typeof events !== 'undefined') {
                     for (let event of events) {
+                        // Fill calendar
                         if (event.start.date === formattedDate && event.start.date.split('-')[0] == yr && event.start.date.split('-')[1] == mon+1) {
                             button.style.backgroundColor = 'hsla(0,0%,100%,0.05)';
 
@@ -110,9 +113,34 @@ function generateCalendar() {
                             divTime.append(from, to);
                             button.append(divTime);
                             button.addEventListener('click', openEvent.bind(this, button, from.textContent, to.textContent, event.id));
+
+
+                            // Fill report table
+                            const table_tr = document.createElement('tr');
+                            const table_date = document.createElement('td');
+                            const table_from = document.createElement('td');
+                            const table_to = document.createElement('td');
+                            const table_count = document.createElement('td');
+                            table_date.textContent = shortDate(formattedDate);
+                            table_from.textContent = event.description.split(';')[0];
+                            table_to.textContent = event.description.split(';')[1];
+                            table_count.textContent =  timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0]);
+                            table_tr.appendChild(table_date);
+                            table_tr.appendChild(table_from);
+                            table_tr.appendChild(table_to);
+                            table_tr.appendChild(table_count);
+
+                            hour_count += parseFloat(table_count.textContent);
+                            console.log(parseFloat(table_count.textContent));
+                            document.getElementById('counter').innerHTML = 'Celkem h.: <span>'+ hour_count +'</span> h';
+                            document.getElementById('money').innerHTML = 'Součet: <span>'+ hour_count * 175 +'</span> Kč,-';
+
+                            reportTable.appendChild(table_tr);
                         }
                     }
                 }
+
+
 
                 // Append button
                 dayCell.append(button);
@@ -164,3 +192,22 @@ function openEvent(button, from = null, to = null, id = null) {
 function closeEvent() {
     eventContainer.style.display = 'none';
 }
+
+
+
+
+
+// Shorten the date
+function shortDate(date) {
+    let parts = date.split('-');
+    return `${parts[2]}.${parts[1]}.`;
+}
+
+// Hour to decimal
+function timeToDecimal(time) {
+    let [hours, minutes] = time.split(':').map(Number);
+    let decimalMinutes = minutes / 60;
+
+    return hours + decimalMinutes;
+}
+

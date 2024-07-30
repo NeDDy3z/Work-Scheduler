@@ -36,8 +36,8 @@ function isAuthenticated(request, response, next) {
 router.get('/', isAuthenticated, async (request, response) => {
     try {
         const { year, month } = request.query;
-        const data = await calendar.getEvents(year, month);
-        //data = debugEvents;
+        let data = await calendar.getEvents(year, month);
+        if (!data) data = [];
 
         response.status(200).render('pages/schedule', { data: data });
     } catch (e) {
