@@ -3,6 +3,10 @@
 <%# Import <head></head> %>
 <%- include('../partials/head'); %>
 <body>
+<script>
+    // Load events from server to access it via JS
+    const events = JSON.parse(JSON.stringify(<%- JSON.stringify(data) %>, null, 2));
+</script>
 <header class="title-container">
     <h1><a href="">Work Scheduler</a></h1>
 </header>
@@ -44,7 +48,7 @@
             </tbody>
         </table>
         <div id="calendar-tools">
-            <button class="calendar-input-button" id="export" type="submit" formmethod="get" formaction="/export">Export</button>
+            <button class="calendar-input-button" id="export" type="submit" onclick="reportPrint()">Export</button>
             <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill">Fill</button>
         </div>
 
@@ -70,6 +74,26 @@
         </div>
     </div>
 
+    <div id="report">
+        <table id="report-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Od</th>
+                    <th>Do</th>
+                    <th>Hodiny</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="sum">
+            <p id="counter"></p>
+            <p id="money"></p>
+            <p>Erik Vaněk</p>
+        </div>
+    </div>
+
     <button onclick="toggleEvents()" id="login-submit" style="color: gray; font-size: 10px">Toggle debug</button>
     <div id="events-debug" style="display: none;">
         <%# Display events %>
@@ -85,9 +109,6 @@
     </div>
 </main>
 <script>
-    // Load events from server to access it via JS
-    const events = JSON.parse(JSON.stringify(<%- JSON.stringify(data) %>, null, 2));
-
     // Open close debug events
     const debug = document.getElementById('events-debug');
     let visible = false
@@ -101,6 +122,15 @@
         }
     }
 </script>
+<script>
+    // export
+    function reportPrint() {
+        document.getElementById("report").style.visibility = "visible";
+        window.print();
+        document.getElementById("report").style.visibility = "hidden";
+    }
+</script>
 <script src="js/schedule-script.js"></script>
+<script src="js/report.js"></script>
 </body>
 </html>

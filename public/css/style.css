@@ -1,6 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap');
 
+
+
+/*Print - remove url and name*/
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;
+}
+
+@media print {
+    header, .calendar-selection, .calendar, #login-submit {
+        visibility: hidden;
+    }
+
+    html, body {
+        height:100%;
+        overflow: hidden;
+    }
+
+    #report {
+        visibility: visible;
+        display: block;
+    }
+}
+
+
+
+/* Global vars */
 :root {
     /*--current-global-font: "Roboto Slab", serif;*/
     --current-global-font: "Outfit", sans-serif;

@@ -57,7 +57,7 @@ input::-webkit-inner-spin-button {
     border: solid 5px #0f172a;
 }
 
-tr, td, th {
+.calendar tr, .calendar td, .calendar th {
     width: 8rem;
     height: 4rem;
 
@@ -67,15 +67,15 @@ tr, td, th {
     border: solid 2px #2525253a;
 }
 
-thead tr, thead th {
+.calendar thead tr, .calendar thead th {
     height: 1rem;
 }
 
-thead {
+.calendar thead {
     background-color: #0d0d0d60;
 }
 
-td button {
+.calendar td button {
     display: flex;
     flex-direction: column;
 
@@ -94,18 +94,18 @@ td button {
 
 }
 
-td button:hover {
+.calendar td button:hover {
     background-color: rgba(13, 13, 13, 0.2);
 }
 
-td button:focus, td button:active {
+.calendar td button:focus, td button:active {
     outline: none;
     outline: solid 2px var(--button);
     border-radius: .2rem;
 }
 
 
-td button .day {
+.calendar td button .day {
     text-align: left;
 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -115,7 +115,7 @@ td button .day {
     color: gray;
 }
 
-td button div {
+.calendar td button div {
     padding: 0;
     margin: 0;
 
