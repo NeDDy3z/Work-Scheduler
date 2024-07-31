@@ -13,8 +13,8 @@
 <main>
     <div class="calendar-selection">
         <form action="" method="get" id="event-select">
-            <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024" onchange="submitForm()">
-            <select id="month" name="month" onchange="submitForm()">
+            <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024" onchange="dateSelectionSubmit()" required>
+            <select id="month" name="month" onchange="dateSelectionSubmit()" required>
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -48,7 +48,7 @@
             </tbody>
         </table>
         <div id="calendar-tools">
-            <button class="calendar-input-button" id="export" type="submit" onclick="reportPrint()">Export</button>
+            <button class="calendar-input-button" id="export" type="submit" onclick="reportExport()">Export</button>
             <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill">Fill</button>
         </div>
 
@@ -58,7 +58,7 @@
                     <p id="event-date-p"></p>
                     <input type="text" id="event-date" name="date" hidden>
                     <input type="text" id="event-id" name="id" hidden>
-                    <button onclick="closeEvent()" id="event-close">X</button>
+                    <button onclick="eventClose()" id="event-close">X</button>
                 </div>
                 <div id="event-time">
                     <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="20:00" required>
@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <button onclick="toggleEvents()" id="login-submit" style="color: gray; font-size: 10px">Toggle debug</button>
+    <button onclick="toggleEvents()" id="login-submit" style="color: gray; visibility: hidden; font-size: 10px">Toggle debug</button>
     <div id="events-debug" style="display: none;">
         <%# Display events %>
         <% if (typeof data !== 'undefined') {
@@ -122,15 +122,7 @@
         }
     }
 </script>
-<script>
-    // export
-    function reportPrint() {
-        document.getElementById("report").style.visibility = "visible";
-        window.print();
-        document.getElementById("report").style.visibility = "hidden";
-    }
-</script>
-<script src="js/schedule-script.js"></script>
 <script src="js/report.js"></script>
+<script src="js/schedule-script.js"></script>
 </body>
 </html>

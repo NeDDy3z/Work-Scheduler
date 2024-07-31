@@ -12,7 +12,7 @@
     border: none;
     border-bottom: 2px solid var(--text);
     background: var(--background);
-    color: white;
+    color: var(--text);
 }
 
 .calendar-selection input[type=number] {
@@ -73,6 +73,7 @@ input::-webkit-inner-spin-button {
 
 .calendar thead {
     background-color: #0d0d0d60;
+    color: white;
 }
 
 .calendar td button {
@@ -184,7 +185,7 @@ input::-webkit-inner-spin-button {
 
     font-family: var(--current-global-font);
     font-size: 18px;
-    color: white;
+    color: var(--text);
 }
 
 #event-container .event-time-input:focus {

@@ -13,35 +13,44 @@ const eventId = document.getElementById('event-id');
 const eventTimeFrom = document.getElementById('event-time-from');
 const eventTimeTo = document.getElementById('event-time-to');
 
-const reportTable = document.getElementById('report-table');
-
 
 
 // Generate
 window.onload = () => {
-    if (!year.value) year.value = new Date().getFullYear();
-    if (!month.value) month.selectedInex = new Date().getMonth() + 1;
+    try {
+        let cookies = document.cookie.split(';');
+        cookies.forEach(cookie => {
+                if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
+                if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1 ;
+            }
+        );
+    } catch (e) {
+        console.log("There was an error with loading cookies\n\n"+ e);
+
+        document.cookie = 'year=2024';
+        document.cookie = 'month=1';
+    }
 
 
-    let cookies = document.cookie.split(';');
-    cookies.forEach(cookie => {
-            if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
-            if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) -1 ;
-        }
-    );
 
     generateCalendar();
+    reportFillData(year.value, month.selectedIndex + 1);
 };
 
 
 
 
 // Subbmision
-function submitForm() {
-    if (year.value) document.cookie = 'year='+ year.value;
-    if (month.value) document.cookie = 'month='+ month.value;
+function dateSelectionSubmit() {
+    try {
+        document.cookie = 'year='+ year.value;
+        document.cookie = 'month='+ month.value;
 
-    document.getElementById('event-select').submit();
+        document.getElementById('event-select').submit();
+    } catch (e) {
+        console.log("There was an error with selecting date\n\n"+ e);
+    }
+
 }
 
 // Generate calendar view
@@ -55,7 +64,7 @@ function generateCalendar() {
 
 
     // Clear calendar
-    const calendarBody = document.getElementById('calendar-body');
+    let calendarBody = document.getElementById('calendar-body');
     calendarBody.innerHTML = '';
 
     // Create calendar
@@ -68,7 +77,7 @@ function generateCalendar() {
     let hour_count = 0;
     // Fill calendar
     while (currentDate <= endDate || currentDate.getDay() !== 1) {
-        const weekRow = document.createElement('tr');
+        let weekRow = document.createElement('tr');
 
         for (let i = 0; i < 7; i++) {
             // Set Google compatible date
@@ -76,9 +85,9 @@ function generateCalendar() {
             formattedDate = (new Date(formattedDate.setDate(currentDate.getDate()+1))).toISOString().split('T')[0];
 
             // Created day cell - insert button & day
-            const dayCell = document.createElement('td');
-            const button = document.createElement('button');
-            const day = document.createElement('p');
+            let dayCell = document.createElement('td');
+            let button = document.createElement('button');
+            let day = document.createElement('p');
 
             if (currentDate.getMonth() === mon) {
                 // Set buttons id to date & click event
@@ -89,7 +98,7 @@ function generateCalendar() {
                 day.className = 'day';
 
                 button.append(day);
-                button.addEventListener('click', openEvent.bind(this, button));
+                button.addEventListener('click', eventOpen.bind(this, button));
 
 
                 // Set data
@@ -99,9 +108,9 @@ function generateCalendar() {
                         if (event.start.date === formattedDate && event.start.date.split('-')[0] == yr && event.start.date.split('-')[1] == mon+1) {
                             button.style.backgroundColor = 'hsla(0,0%,100%,0.05)';
 
-                            const divTime = document.createElement('div');
-                            const from = document.createElement('p');
-                            const to = document.createElement('p');
+                            let divTime = document.createElement('div');
+                            let from = document.createElement('p');
+                            let to = document.createElement('p');
 
                             if (event.description) {
                                 from.textContent = event.description.split(';')[0];
@@ -112,35 +121,10 @@ function generateCalendar() {
 
                             divTime.append(from, to);
                             button.append(divTime);
-                            button.addEventListener('click', openEvent.bind(this, button, from.textContent, to.textContent, event.id));
-
-
-                            // Fill report table
-                            const table_tr = document.createElement('tr');
-                            const table_date = document.createElement('td');
-                            const table_from = document.createElement('td');
-                            const table_to = document.createElement('td');
-                            const table_count = document.createElement('td');
-                            table_date.textContent = shortDate(formattedDate);
-                            table_from.textContent = event.description.split(';')[0];
-                            table_to.textContent = event.description.split(';')[1];
-                            table_count.textContent =  timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0]);
-                            table_tr.appendChild(table_date);
-                            table_tr.appendChild(table_from);
-                            table_tr.appendChild(table_to);
-                            table_tr.appendChild(table_count);
-
-                            hour_count += parseFloat(table_count.textContent);
-                            console.log(parseFloat(table_count.textContent));
-                            document.getElementById('counter').innerHTML = 'Celkem h.: <span>'+ hour_count +'</span> h';
-                            document.getElementById('money').innerHTML = 'Součet: <span>'+ hour_count * 175 +'</span> Kč,-';
-
-                            reportTable.appendChild(table_tr);
+                            button.addEventListener('click', eventOpen.bind(this, button, from.textContent, to.textContent, event.id));
                         }
                     }
                 }
-
-
 
                 // Append button
                 dayCell.append(button);
@@ -158,56 +142,55 @@ function generateCalendar() {
 
 
 // Open event for details and editing
-function openEvent(button, from = null, to = null, id = null) {
-    // Show div
-    eventContainer.style.display = 'block';
+function eventOpen(button, from = null, to = null, id = null) {
+    try {
+        // Show div
+        eventContainer.style.display = 'block';
 
-    // Reset
-    eventDate.textContent = null;
-    eventTimeFrom.value = null;
-    eventTimeTo.value = null;
-    addEventButton.style.display = 'block';
-    deleteEventButton.style.display = 'block';
-    updateEventButton.style.display = 'block';
+        // Reset
+        eventDate.textContent = null;
+        eventTimeFrom.value = null;
+        eventTimeTo.value = null;
+        addEventButton.style.display = 'block';
+        deleteEventButton.style.display = 'block';
+        updateEventButton.style.display = 'block';
 
 
-    // Load data (based on a date)
-    eventDate.textContent = button.id;
-    eventDateInput.value = button.id;
-    if (from && to && id) {
-        eventTimeFrom.value = from.length <= 4 ? "0".concat(from) : from;
-        eventTimeTo.value = to.length <= 4 ? "0".concat(to) : to;
+        // Load data (based on a date)
+        eventDate.textContent = button.id;
+        eventDateInput.value = button.id;
+        if (from && to && id) {
+            eventTimeFrom.value = from.length <= 4 ? "0".concat(from) : from;
+            eventTimeTo.value = to.length <= 4 ? "0".concat(to) : to;
 
-        eventId.value = id;
+            eventId.value = id;
 
-        addEventButton.style.display = 'none';
-    }
-    else {
-        updateEventButton.style.display = 'none';
-        deleteEventButton.style.display = 'none';
+            addEventButton.style.display = 'none';
+        }
+        else {
+            eventTimeFrom.value = '10:00'
+            eventTimeTo.value = '18:00';
+
+            updateEventButton.style.display = 'none';
+            deleteEventButton.style.display = 'none';
+        }
+    } catch (e) {
+        console.log("There was an error with opening event\n\n"+ e);
     }
 }
 
 // Close event
-function closeEvent() {
-    eventContainer.style.display = 'none';
+function eventClose() {
+    try {
+        eventContainer.style.display = 'none';
+    } catch (e) {
+        console.log("There was an error with closing event\n\n"+ e);
+    }
 }
 
 
 
 
 
-// Shorten the date
-function shortDate(date) {
-    let parts = date.split('-');
-    return `${parts[2]}.${parts[1]}.`;
-}
 
-// Hour to decimal
-function timeToDecimal(time) {
-    let [hours, minutes] = time.split(':').map(Number);
-    let decimalMinutes = minutes / 60;
-
-    return hours + decimalMinutes;
-}
 

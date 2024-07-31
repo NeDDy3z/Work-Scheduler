@@ -28,7 +28,7 @@
 
     font-family: var(--current-global-font);
     font-size: 18px;
-    color: white;
+    color: var(--text);
 }
 
 #password:focus {

@@ -31,9 +31,12 @@
 :root {
     /*--current-global-font: "Roboto Slab", serif;*/
     --current-global-font: "Outfit", sans-serif;
-    --background: #0f172a;
-    --text: #e6eaf6;
+    --background: #f8f8f6;
+    --text: #111a2e;
     --button: #6c49c4;
+
+    --background-old: #0f172a;
+    --text-old: #e6eaf6;
 }
 
 
@@ -47,7 +50,7 @@
 
 html {
     font-family: var(--current-global-font);
-    color: white;
+    color: var(--text);
     background-color: var(--background);
 }
 
@@ -77,13 +80,13 @@ header h4 {
 
 
 a {
-    color: white;
+    color: var(--text);
     text-decoration: none;
 }
 
 /* INPUT AUTOFILL - NOT YELLOW */
 input:-webkit-autofill, input:-webkit-autofill:focus {
     box-shadow: 0 0 0 1000px var(--background) inset;
-    -webkit-text-fill-color: white !important
+    -webkit-text-fill-color: var(--text) !important
 }
 
