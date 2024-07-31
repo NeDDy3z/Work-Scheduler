@@ -57,7 +57,7 @@ router.post('/event/add', isAuthenticated, async (request, response) => {
 
         setTimeout(function() {
             response.status(200).redirect('/schedule');
-        }, 500);
+        }, 750);
 
     } catch (e) {
         response.status(500).send("Internal server error");

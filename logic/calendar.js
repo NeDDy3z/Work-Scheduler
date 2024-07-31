@@ -76,14 +76,21 @@ async function getEventsAPI(auth, year, month) {
         singleEvents: true,
         orderBy: 'startTime',
     });
+
     const events = res.data.items;
     if (!events || events.length === 0) {
         console.log('No upcoming events found.');
         return;
     }
-    console.log("Events requested: %s", events.length);
+    else {
+        let filteredEvents
+        filteredEvents = events.filter(event => event.summary === 'Erik');
+        filteredEvents = filteredEvents.filter(event => event.description);
 
-    return events;
+        console.log("Events requested: %s", filteredEvents.length);
+
+        return filteredEvents;
+    }
 }
 
 // Add event
