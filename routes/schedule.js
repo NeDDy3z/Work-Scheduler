@@ -7,12 +7,12 @@ const calendar = require('../logic/calendar');
 function createEvent(date, from, to) {
     return {
         'summary': 'Erik',
-        'description': from + ';' + to,
+        'description': from.toString() + ';' + to.toString(),
         'start': {
-            'date': date
+            'date': date.toString()
         },
         'end': {
-            'date': date
+            'date': date.toString()
         }
     }
 }
@@ -35,14 +35,23 @@ function isAuthenticated(request, response, next) {
 // GET - page (also check if user is loggedIn to be able to access this page)
 router.get('/', isAuthenticated, async (request, response) => {
     try {
-        const { year, month } = request.query;
+        let { year, month } = request.query;
+        if (!year || !month) {
+            year = new Date().getFullYear();
+            month = new Date().getMonth() + 1;
+        }
         let data = await calendar.getEvents(year, month);
+
         if (!data) data = [];
+        else {
+            data = data.filter(event => event.summary == 'Erik');
+            data = data.filter(event => event.description);
+        }
 
         response.status(200).render('pages/schedule', { data: data });
     } catch (e) {
-        // Error => 500
         response.status(500).send("Internal server error");
+        console.log(e);
     }
 });
 
@@ -61,8 +70,12 @@ router.post('/event/add', isAuthenticated, async (request, response) => {
 
     } catch (e) {
         response.status(500).send("Internal server error");
+        console.log(e);
     }
 });
+
+
+
 
 // Delete Event
 router.post('/event/delete', isAuthenticated, async (request, response) => {
@@ -72,9 +85,10 @@ router.post('/event/delete', isAuthenticated, async (request, response) => {
 
         setTimeout(function() {
             response.status(200).redirect('/schedule');
-        }, 500);
+        }, 250);
     } catch (e) {
         response.status(500).send("Internal server error");
+        console.log(e);
     }
 });
 
@@ -83,26 +97,18 @@ router.post('/event/update', isAuthenticated, async (request, response) => {
     try {
         const { date, from, to, id  } = request.body;
 
-        await calendar.deleteEvent(id);
-        await calendar.addEvent(createEvent(date, from, to));
+        //await calendar.deleteEvent(id);
+        //await calendar.addEvent(createEvent(date, from, to));
+        await calendar.updateEvent(id, createEvent(date, from, to));
 
         setTimeout(function() {
             response.status(200).redirect('/schedule');
-        }, 600);
+        }, 750);
     } catch (e) {
         response.status(500).send("Internal server error");
+        console.log(e);
     }
 });
-
-
-
-// Export
-router.get('/export', isAuthenticated, async (request, response) => {
-    //report.getReport();
-    //response.redirect('/schedule');
-});
-
-
 
 
 

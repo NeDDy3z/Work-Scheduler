@@ -11,6 +11,7 @@
 
 @media print {
     header, .calendar-selection, .calendar, #login-submit {
+        display: none;
         visibility: hidden;
     }
 
@@ -19,9 +20,13 @@
         overflow: hidden;
     }
 
-    #report {
+    #report-container {
         visibility: visible;
-        display: block;
+        display: flex;
+    }
+
+    #report {
+        margin-top: 4rem;
     }
 }
 

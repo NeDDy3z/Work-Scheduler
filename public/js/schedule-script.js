@@ -19,16 +19,23 @@ const eventTimeTo = document.getElementById('event-time-to');
 window.onload = () => {
     try {
         let cookies = document.cookie.split(';');
-        cookies.forEach(cookie => {
-                if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
-                if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1 ;
-            }
-        );
+
+        if (document.cookie.includes('year') && document.cookie.includes('month')) {
+            cookies.forEach(cookie => {
+                    if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
+                    if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1 ;
+                }
+            );
+        }
+        else throw "No cookies found";
+
     } catch (e) {
         console.log("There was an error with loading cookies\n\n"+ e);
 
-        document.cookie = 'year=2024';
-        document.cookie = 'month=1';
+        document.cookie = 'year='+ new Date().getFullYear();
+        document.cookie = 'month='+ (parseInt(new Date().getMonth()) + 1);
+
+        dateSelectionSubmit();
     }
 
 
