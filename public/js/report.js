@@ -1,7 +1,9 @@
-const reportDiv = document.getElementById('report');
+const reportDiv = document.getElementById('report-container');
 const reportTable = document.getElementById('report-table');
 const reportHours = document.getElementById('counter');
 const reportMoney = document.getElementById('money');
+
+let visible = false;
 
 
 
@@ -15,60 +17,96 @@ function reportFillData(year, month) {
                 event.start.date.split('-')[1] == month &&
                 event.summary == 'Erik' &&
                 typeof event.description !== 'undefined') {
-                let reportTableRow = document.createElement('tr');
-                let reportTableDate = document.createElement('td');
-                let reportTableFrom = document.createElement('td');
-                let reportTableTo = document.createElement('td');
-                let reportTableHours = document.createElement('td');
+                reportTable.innerHTML += `
+                <tr class="report-table-row">
+                    <td><input type="text" id="report-table-date" value="${shortDate(event.start.date)}"></td>
+                    <td><input type="time" id="report-table-from" min="09:00" max="19:00" onchange="reportUpdate()" value="${event.description.split(';')[0]}"></td>
+                    <td><input type="time" id="report-table-to" min="09:00" max="19:00" onchange="reportUpdate()"value="${event.description.split(';')[1]}"></td>
+                    <td><input type="text" class="report-table-hour" value="${timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0])}" readonly></td>
+                </tr>
+                `;
 
-                reportTableDate.textContent = shortDate(event.start.date);
-                if (typeof event.description !== 'undefined' && event.description.length == 11 && event.description.includes(';')) {
-                    reportTableFrom.textContent = event.description.split(';')[0];
-                    reportTableTo.textContent = event.description.split(';')[1];
-                    reportTableHours.textContent = timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0]);
-                }
-
-                reportTableRow.appendChild(reportTableDate);
-                reportTableRow.appendChild(reportTableFrom);
-                reportTableRow.appendChild(reportTableTo);
-                reportTableRow.appendChild(reportTableHours);
-
-                hourCount += parseFloat(reportTableHours.textContent);
-
-                reportTable.appendChild(reportTableRow);
+                hourCount += (timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0]));
             }
-
-            reportHours.innerHTML = 'Celkem h.: <span>'+ hourCount +'</span> h';
-            reportMoney.innerHTML = 'Součet: <span>'+ hourCount * 175 +'</span> Kč,-';
         });
+
+        reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
+        reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-'
     } catch (e) {
-        console.log("There was an error fillling the report table: \n\n" + e);
+        console.log("There was an error fillling the report table:\n" + e);
     }
 }
 
 // Export to PDF - open print function in browser
 function reportExport() {
     try {
+        let hourCount = 0;
+        document.querySelectorAll('.report-table-row').forEach(row => {
+            let hour = (timeToDecimal(row.querySelector('#report-table-to').value) - timeToDecimal(row.querySelector('#report-table-from').value))
+            hourCount += hour;
+            row.querySelector('.report-table-hour').value = hour;
+        });
+
+        reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
+        reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-';
+
         reportDiv.style.visibility = "visible";
+        reportDiv.className = '';
         window.print();
         reportDiv.style.visibility = "hidden";
     } catch (e) {
-        console.log("There was an error exporting the report: \n\n" + e);
+        console.log("There was an error exporting the report:\n" + e);
     }
+}
+
+function reportUpdate() {
+    let hourCount = 0;
+    document.querySelectorAll('.report-table-row').forEach(row => {
+        let hour = (timeToDecimal(row.querySelector('#report-table-to').value) - timeToDecimal(row.querySelector('#report-table-from').value))
+        hourCount += hour;
+        row.querySelector('.report-table-hour').value = hour.toFixed(2);
+    });
+
+    reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
+    reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-';
+}
+
+function reportToggle() {
+    if (visible) {
+        reportDiv.style.visibility = 'hidden';
+        reportDiv.className = '';
+    }
+    else {
+        reportDiv.style.visibility = 'visible';
+        reportDiv.className = 'report-editing';
+    }
+
+    visible = !visible;
 }
 
 
 
 // Shorten the date
 function shortDate(date) {
-    let parts = date.split('-');
-    return `${parts[2]}.${parts[1]}.`;
+    try {
+        let parts = date.split('-');
+        return `${parts[2]}.${parts[1]}.`;
+    } catch (e) {
+        console.log("There was an error shortening the date:\n" + e);
+        return date;
+    }
+
 }
 
 // Hour to decimal
 function timeToDecimal(time) {
-    let [hours, minutes] = time.split(':').map(Number);
-    let decimalMinutes = minutes / 60;
+    try {
+        let [hours, minutes] = time.split(':').map(Number);
+        let decimalMinutes = minutes / 60;
 
-    return hours + decimalMinutes;
+        return hours + decimalMinutes;
+    } catch (e) {
+        console.log("There was an error converting time to decimal:\n" + e);
+        return time;
+    }
 }

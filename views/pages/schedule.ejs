@@ -14,7 +14,7 @@
     <div class="calendar-selection">
         <form action="" method="get" id="event-select">
             <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024" onchange="dateSelectionSubmit()" required>
-            <select id="month" name="month" onchange="dateSelectionSubmit()" required>
+            <select id="month" name="month" onchange="dateSelectionSubmit()" required >
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -49,7 +49,7 @@
         </table>
         <div id="calendar-tools">
             <button class="calendar-input-button" id="export" type="submit" onclick="reportExport()">Export</button>
-            <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill">Fill</button>
+            <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill" style="display: none;">Fill</button>
         </div>
 
         <div id="event-container" style="display: none;">
@@ -61,9 +61,9 @@
                     <button onclick="eventClose()" id="event-close">X</button>
                 </div>
                 <div id="event-time">
-                    <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="20:00" required>
+                    <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="19:00" required>
                     <p>_</p>
-                    <input type="time" id="event-time-to" class="event-time-input" name="to" min="09:00" max="20:00" required>
+                    <input type="time" id="event-time-to" class="event-time-input" name="to" min="09:00" max="19:00" required>
                 </div>
                 <div id="event-controls">
                     <button type="submit" id="event-add" class="event-button calendar-input-button" formmethod="post" formaction="schedule/event/add">Add</button>
@@ -74,35 +74,40 @@
         </div>
     </div>
 
-    <div id="report">
-        <table id="report-table">
-            <thead>
+    <div id="report-container">
+        <div id="report" class="">
+            <table id="report-table">
+                <thead>
                 <tr>
                     <th>Datum</th>
                     <th>Od</th>
                     <th>Do</th>
                     <th>Hodiny</th>
                 </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <div id="sum">
-            <p id="counter"></p>
-            <p id="money"></p>
-            <p>Erik Vaněk</p>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="sum">
+                <p id="counter"></p>
+                <p id="money"></p>
+                <p>Erik Vaněk</p>
+            </div>
         </div>
     </div>
 
-    <button onclick="toggleEvents()" id="login-submit" style="color: gray; visibility: hidden; font-size: 10px">Toggle debug</button>
-    <div id="events-debug" style="display: none;">
+    <button onclick="toggleDebug()" id="login-submit" style="color: lightgray; font-size: 10px">Debug</button>
+    <button onclick="reportToggle()" id="login-submit" style="color: lightgray; font-size: 10px">Edit report</button>
+
+    <div id="events-debug" style="display: none; font-family: 'Consolas'">
         <%# Display events %>
         <% if (typeof data !== 'undefined') {
         for (var i = 0; i < data.length; i++) {
             var event = data[i]; %>
         <div style="display: flex; justify-content: space-between; width: 10rem;">
-            <p><%= event.start.date %></p>
-            <p><%= event.summary %></p>
+            <p><%= event.start.date %>___</p>
+            <p><%= event.summary %>___</p>
+            <p><%= event.description %></p>
         </div>
         <% }
         } %>
@@ -111,15 +116,11 @@
 <script>
     // Open close debug events
     const debug = document.getElementById('events-debug');
-    let visible = false
-    function toggleEvents() {
-        if (visible) {
-            debug.style.display = 'none';
-            visible = false;
-        } else {
-            debug.style.display = 'block';
-            visible = true;
-        }
+    let debugVisible = false;
+
+    function toggleDebug() {
+        debug.style.display = debugVisible ? 'none' : 'block';
+        debugVisible = !debugVisible;
     }
 </script>
 <script src="js/report.js"></script>

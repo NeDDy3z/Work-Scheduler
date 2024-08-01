@@ -12,8 +12,10 @@ const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
-const calendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
+const DEBUGcalendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
+const WORKcalendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
 
+const calendarId = DEBUGcalendarId;
 
 
 // Load Credentials from token.json
@@ -71,10 +73,11 @@ async function getEventsAPI(auth, year, month) {
     const calendar = google.calendar({version: 'v3', auth});
     const res = await calendar.events.list({
         calendarId: calendarId,
-        timeMin: new Date(year, month - 1, 1).toISOString(),
+        timeMin: new Date(year, month - 1, 0).toISOString(),
+        timeMax: new Date(year, month, 1).toISOString(),
         maxResults: 31,
         singleEvents: true,
-        orderBy: 'startTime',
+        orderBy: 'startTime'
     });
 
     const events = res.data.items;
@@ -83,13 +86,9 @@ async function getEventsAPI(auth, year, month) {
         return;
     }
     else {
-        let filteredEvents
-        filteredEvents = events.filter(event => event.summary === 'Erik');
-        filteredEvents = filteredEvents.filter(event => event.description);
+        console.log("Events requested: %s", events.length);
 
-        console.log("Events requested: %s", filteredEvents.length);
-
-        return filteredEvents;
+        return events;
     }
 }
 
@@ -101,16 +100,18 @@ async function addEventAPI(event) {
     const res = await calendar.events.insert({
         auth: auth,
         calendarId: calendarId,
-        resource: event,
+        resource: event
     }, function(err, event) {
         if (err) {
             console.log('There was an error contacting the Calendar service: ' + err);
             return;
         }
+
         console.log("Event created");
     });
 }
 
+// Delete event
 async function deleteEventAPI(id) {
     const auth = await authorize();
 
@@ -118,16 +119,34 @@ async function deleteEventAPI(id) {
     const res = await calendar.events.delete({
         auth: auth,
         calendarId: calendarId,
-        eventId: id,
+        eventId: id
     }, function(err, event) {
         if (err) {
             console.log('There was an error contacting the Calendar service: ' + err);
             return;
         }
-        console.log("Event deleted");
+        console.log("Event updated");
     });
 }
 
+// Update event
+async function updateEventAPI(id, event) {
+    const auth = await authorize();
+
+    const calendar = google.calendar({version: 'v3', auth});
+    const res = await calendar.events.update({
+        auth: auth,
+        calendarId: calendarId,
+        eventId: id,
+        resource: event
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log("Event updated");
+    });
+}
 
 
 
@@ -143,8 +162,10 @@ function deleteEvent(id) {
     authorize().then(deleteEventAPI(id)).catch(console.error);
 }
 
+function updateEvent(id, event) {
+    authorize().then(updateEventAPI(id, event)).catch(console.error);
+}
 
 
 
-
-module.exports = { getEvents, addEvent, deleteEvent }
+module.exports = { getEvents, addEvent, deleteEvent, updateEvent }
