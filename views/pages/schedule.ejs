@@ -48,7 +48,7 @@
             </tbody>
         </table>
         <div id="calendar-tools">
-            <button class="calendar-input-button" id="export" type="submit" onclick="reportExport()">Export</button>
+            <button class="calendar-input-button" id="export" type="submit" onclick="reportOpen()">Export</button>
             <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill" style="display: none;">Fill</button>
         </div>
 
@@ -75,6 +75,10 @@
     </div>
 
     <div id="report-container">
+        <div id="report-controls">
+            <button id="report-add" class="event-button calendar-input-button" onclick="reportExport()">Export</button>
+            <button id="report-close" class="event-button calendar-input-button" onclick="reportClose()">X</button>
+        </div>
         <div id="report" class="">
             <table id="report-table">
                 <thead>
@@ -97,7 +101,6 @@
     </div>
 
     <button onclick="toggleDebug()" id="login-submit" style="color: lightgray; font-size: 10px">Debug</button>
-    <button onclick="reportToggle()" id="login-submit" style="color: lightgray; font-size: 10px">Edit report</button>
 
     <div id="events-debug" style="display: none; font-family: 'Consolas'">
         <%# Display events %>

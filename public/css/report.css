@@ -14,6 +14,8 @@
 #report {
     margin-top: 4rem;
 
+    width: 80%;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -71,22 +73,33 @@
 
 
 
+
+/* Editing */
 .report-editing {
-    margin-top: 5rem;
+    margin-top: 7rem;
 
+    display: flex;
+    flex-direction: column;
+}
+
+.report-editing #report-controls {
+    margin-bottom: -7.5rem;
+    z-index: 1000;
+
+    display: flex;
+    align-self: center;
+    justify-content: space-between;
+}
+
+.report-editing #report {
     padding: 2rem;
-    max-width: 60rem;
+    padding-top: 4rem;
 
-    border: 1px solid grey;
+    width: 40rem;
+    min-height: 30rem;
+
+    border: 2px grey solid;
     border-radius: 1rem;
 
     background-color: var(--background);
 }
-
-
-
-
-
-
-
-
