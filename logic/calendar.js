@@ -15,7 +15,8 @@ const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 const DEBUGcalendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
 const WORKcalendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
 
-const calendarId = DEBUGcalendarId;
+//const calendarId = DEBUGcalendarId;
+const calendarId = WORKcalendarId;
 
 
 // Load Credentials from token.json

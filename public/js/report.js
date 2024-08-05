@@ -1,9 +1,8 @@
 const reportDiv = document.getElementById('report-container');
+const reportControls = document.getElementById('report-controls');
 const reportTable = document.getElementById('report-table');
 const reportHours = document.getElementById('counter');
 const reportMoney = document.getElementById('money');
-
-let visible = false;
 
 
 
@@ -52,6 +51,7 @@ function reportExport() {
 
         reportDiv.style.visibility = "visible";
         reportDiv.className = '';
+        reportControls.style.display = "none";
         window.print();
         reportDiv.style.visibility = "hidden";
     } catch (e) {
@@ -59,6 +59,7 @@ function reportExport() {
     }
 }
 
+// Update report
 function reportUpdate() {
     let hourCount = 0;
     document.querySelectorAll('.report-table-row').forEach(row => {
@@ -71,17 +72,17 @@ function reportUpdate() {
     reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-';
 }
 
-function reportToggle() {
-    if (visible) {
-        reportDiv.style.visibility = 'hidden';
-        reportDiv.className = '';
-    }
-    else {
-        reportDiv.style.visibility = 'visible';
-        reportDiv.className = 'report-editing';
-    }
+// Open report
+function reportOpen() {
+    reportDiv.style.visibility = "visible";
+    reportDiv.className = 'report-editing';
+    reportControls.style.display = "block";
+}
 
-    visible = !visible;
+// Close report
+function reportClose() {
+    reportDiv.style.visibility = "hidden";
+    reportDiv.className = '';
 }
 
 
