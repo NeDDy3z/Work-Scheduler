@@ -12,7 +12,7 @@ const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
-const calendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
+const calendarId = process.env.CALENDAR_ID;
 
 
 

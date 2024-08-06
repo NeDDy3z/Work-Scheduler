@@ -6,13 +6,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Erik Vaněk",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.0",
     "axios": "^1.7.2",
     "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "exceljs": "^4.4.0",
     "express": "^4.19.2",

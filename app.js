@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const app = express();
+require('dotenv').config()
+
+
 
 // Set routes => in /routes folder
 const indexRouter = require("./routes/index");
@@ -21,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session middleware
 app.use(session({
-    secret: 'SkakalPesPresOves',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     //cookie: { secure: false } // Use true if HTTPS

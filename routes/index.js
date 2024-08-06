@@ -35,7 +35,7 @@ router.post('/', (request, response) => {
 
     try {
         // Check if the password is correct
-        if (encrypt(password) === 'b3db2806f64828fa58fa4f905673a5bf') {
+        if (encrypt(password) === process.env.PASSWORD) {
             // Set session to loggedIn = true
             request.session.loggedIn = true;
             // Redirect to (now accessible) webpage
