@@ -1,25 +1,24 @@
-/*
-let yr = 2024
-let mon = 7 - 1;
-let startDate = new Date(yr, mon, 1);
-let endDate = new Date(yr, mon + 1, 0);
 
 
-// Create calendar
-let currentDate = new Date(startDate);
+const content = {
+    "web": {
+        "client_id": "1041203883981-7qm9ruu3aiaoofa607dvbicpmfqe06tq.apps.googleusercontent.com",
+        "project_id": "work-scheduler-425410",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "https://work-scheduler.up.railway.app/schedule"
+        ],
+        "javascript_origins": [
+            "http://localhost:8080",
+            "https://work-scheduler.up.railway.app:8080"
+        ]
+    }
+};
 
-// Adjust start day to Monday (1st column)
-currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1);
+const credentials = JSON.parse(content);
 
-let formattedDate = new Date(yr, mon-1, 2);
-formattedDate = (new Date(formattedDate.setDate(currentDate.getDate()+1))).toISOString().split('T')[0];
-
-console.log(formattedDate);
-*/
-
-date = "2024-07-31"
-
-
-
-console.log(newDateStr);
+console.log(credentials);
 

@@ -12,11 +12,8 @@ const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
-const DEBUGcalendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
-const WORKcalendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
+const calendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
 
-//const calendarId = DEBUGcalendarId;
-const calendarId = WORKcalendarId;
 
 
 // Load Credentials from token.json
@@ -44,7 +41,7 @@ async function saveCredentials(client) {
     await fs.writeFile(TOKEN_PATH, payload);
 }
 
-// Load or request or authorization to call APIs.
+// Load or request authorization to call APIs.
 async function authorize() {
     let client = await loadSavedCredentialsIfExist();
     if (client) {
@@ -60,8 +57,6 @@ async function authorize() {
     return client;
 }
 
-
-
 // Get events
 async function getEventsAPI(auth, year, month) {
     if (!year || !month) {
@@ -69,12 +64,10 @@ async function getEventsAPI(auth, year, month) {
         month = new Date().getMonth() + 1;
     }
 
-    //const auth = await authorize();
-
     const calendar = google.calendar({version: 'v3', auth});
     const res = await calendar.events.list({
         calendarId: calendarId,
-        timeMin: new Date(year, month - 1, 0).toISOString(),
+        timeMin: new Date(year, month - 1, 1).toISOString(),
         timeMax: new Date(year, month, 1).toISOString(),
         maxResults: 31,
         singleEvents: true,
@@ -85,88 +78,71 @@ async function getEventsAPI(auth, year, month) {
     if (!events || events.length === 0) {
         console.log('No upcoming events found.');
         return;
-    }
-    else {
+    } else {
         console.log("Events requested: %s", events.length);
-
         return events;
     }
 }
 
 // Add event
-async function addEventAPI(event) {
-    const auth = await authorize();
-
+async function addEventAPI(auth, event) {
     const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.insert({
-        auth: auth,
-        calendarId: calendarId,
-        resource: event
-    }, function(err, event) {
-        if (err) {
-            console.log('There was an error contacting the Calendar service: ' + err);
-            return;
-        }
-
+    try {
+        const res = await calendar.events.insert({
+            calendarId: calendarId,
+            resource: event
+        });
         console.log("Event created");
-    });
+        return res.data;
+    } catch (err) {
+        console.log('There was an error contacting the Calendar service: ' + err);
+    }
 }
 
 // Delete event
-async function deleteEventAPI(id) {
-    const auth = await authorize();
-
+async function deleteEventAPI(auth, id) {
     const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.delete({
-        auth: auth,
-        calendarId: calendarId,
-        eventId: id
-    }, function(err, event) {
-        if (err) {
-            console.log('There was an error contacting the Calendar service: ' + err);
-            return;
-        }
-        console.log("Event updated");
-    });
+    try {
+        await calendar.events.delete({
+            calendarId: calendarId,
+            eventId: id
+        });
+        console.log("Event deleted");
+    } catch (err) {
+        console.log('There was an error contacting the Calendar service: ' + err);
+    }
 }
 
 // Update event
-async function updateEventAPI(id, event) {
-    const auth = await authorize();
-
+async function updateEventAPI(auth, id, event) {
     const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.update({
-        auth: auth,
-        calendarId: calendarId,
-        eventId: id,
-        resource: event
-    }, function(err, event) {
-        if (err) {
-            console.log('There was an error contacting the Calendar service: ' + err);
-            return;
-        }
+    try {
+        const res = await calendar.events.update({
+            calendarId: calendarId,
+            eventId: id,
+            resource: event
+        });
         console.log("Event updated");
-    });
+        return res.data;
+    } catch (err) {
+        console.log('There was an error contacting the Calendar service: ' + err);
+    }
 }
-
-
 
 function getEvents(year, month) {
     return authorize().then(auth => getEventsAPI(auth, year, month)).catch(console.error);
 }
 
 function addEvent(event) {
-    authorize().then(addEventAPI(event)).catch(console.error);
+    return authorize().then(auth => addEventAPI(auth, event)).catch(console.error);
 }
 
 function deleteEvent(id) {
-    authorize().then(deleteEventAPI(id)).catch(console.error);
+    return authorize().then(auth => deleteEventAPI(auth, id)).catch(console.error);
 }
 
 function updateEvent(id, event) {
-    authorize().then(updateEventAPI(id, event)).catch(console.error);
+    return authorize().then(auth => updateEventAPI(auth, id, event)).catch(console.error);
 }
 
-
-
-module.exports = { getEvents, addEvent, deleteEvent, updateEvent }
+module.exports = { getEvents, addEvent, deleteEvent, updateEvent };
