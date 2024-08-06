@@ -103,3 +103,18 @@
 
     background-color: var(--background);
 }
+
+
+
+/* Responsive */
+@media screen and (max-width: 650px) {
+    .report-editing #report {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    #report {
+        flex-direction: column;
+    }
+}

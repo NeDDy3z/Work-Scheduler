@@ -32,13 +32,11 @@ window.onload = () => {
     } catch (e) {
         console.log("There was an error with loading cookies\n\n"+ e);
 
-        document.cookie = 'year='+ new Date().getFullYear();
-        document.cookie = 'month='+ (parseInt(new Date().getMonth()) + 1);
+        setCookie('year', new Date().getFullYear());
+        setCookie('month', parseInt(new Date().getMonth()) + 1);
 
-        dateSelectionSubmit();
+        //window.location.reload();
     }
-
-
 
     generateCalendar();
     reportFillData(year.value, month.selectedIndex + 1);
@@ -46,12 +44,24 @@ window.onload = () => {
 
 
 
+// Set cookies
+function setCookie(name, value) {
+    try {
+        let date = new Date(year.value, month.value, 2);
+
+        document.cookie = name + '=' + value + '; expires=' + date.toUTCString();
+    } catch (e) {
+        console.log("There was an error with setting cookies\n\n"+ e);
+    }
+}
+
+
 
 // Subbmision
 function dateSelectionSubmit() {
     try {
-        document.cookie = 'year='+ year.value;
-        document.cookie = 'month='+ month.value;
+        setCookie('year', year.value);
+        setCookie('month', month.value);
 
         document.getElementById('event-select').submit();
     } catch (e) {
@@ -194,6 +204,8 @@ function eventClose() {
         console.log("There was an error with closing event\n\n"+ e);
     }
 }
+
+
 
 
 
