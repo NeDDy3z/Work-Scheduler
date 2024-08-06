@@ -1,8 +1,10 @@
 const crypto = require('crypto');
 
+
+
 // Define the constant secret key and IV
-const secretKey = Buffer.from('5ed0eb6ac24a5eb2a2f908ae8797c130f36812a2dae28b9440ca24345ccbab0c', 'hex');
-const iv = Buffer.from('76dc246948e2de90ab7def42e50a90fe', 'hex');
+const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+const iv = Buffer.from(process.env.IV, 'hex');
 
 
 
@@ -20,7 +22,8 @@ function encrypt(text) {
 }
 
 // Test
-//console.log(encrypt("Password"));
+// crypto.randomBytes(32).toString('hex');
+//console.log(encrypt("MinecraftFranz99"));
 
 
 
