@@ -22,7 +22,6 @@ function createEvent(date, from, to) {
 // Check if user is authenticated
 function isAuthenticated(request, response, next) {
     if (request.session.loggedIn || process.env.DEBUG) {
-        // If so return "continue" command
         return next();
     } else {
         // Not logged in => redirect back to index page
