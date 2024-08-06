@@ -9,7 +9,7 @@ const {google} = require('googleapis');
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/test_credentials.json');
+const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
 const DEBUGcalendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
