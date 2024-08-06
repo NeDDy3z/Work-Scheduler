@@ -18,6 +18,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "gaxios": "^6.6.0",
+    "google-auth": "^0.0.1",
     "google-auth-library": "^9.10.0",
     "googleapis": "^105.0.0",
     "pdf-lib": "^1.17.1",
