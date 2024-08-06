@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" itemscope itemtype="http://schema.org/Article">
+<html lang="cs">
 <%# Import <head></head> %>
 <%- include('../partials/head'); %>
 <body>
@@ -13,8 +13,9 @@
 <main>
     <div class="calendar-selection">
         <form action="" method="get" id="event-select">
-            <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024" onchange="dateSelectionSubmit()" required>
-            <select id="month" name="month" onchange="dateSelectionSubmit()" required >
+            <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024"
+                   onchange="dateSelectionSubmit()" required>
+            <select id="month" name="month" onchange="dateSelectionSubmit()" required>
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -49,7 +50,9 @@
         </table>
         <div id="calendar-tools">
             <button class="calendar-input-button" id="export" type="submit" onclick="reportOpen()">Export</button>
-            <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill" style="display: none;">Fill</button>
+            <button class="calendar-input-button" id="fill" type="submit" formmethod="post" formaction="/fill"
+                    style="display: none;">Fill
+            </button>
         </div>
 
         <div id="event-container" style="display: none;">
@@ -61,14 +64,22 @@
                     <button onclick="eventClose()" id="event-close">X</button>
                 </div>
                 <div id="event-time">
-                    <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="19:00" required>
+                    <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="19:00"
+                           required>
                     <p>_</p>
-                    <input type="time" id="event-time-to" class="event-time-input" name="to" min="09:00" max="19:00" required>
+                    <input type="time" id="event-time-to" class="event-time-input" name="to" min="09:00" max="19:00"
+                           required>
                 </div>
                 <div id="event-controls">
-                    <button type="submit" id="event-add" class="event-button calendar-input-button" formmethod="post" formaction="schedule/event/add">Add</button>
-                    <button type="submit" id="event-delete" class="event-button calendar-input-button" formmethod="post" formaction="schedule/event/delete">Delete</button>
-                    <button type="submit" id="event-update" class="event-button calendar-input-button" formmethod="post" formaction="schedule/event/update">Update</button>
+                    <button type="submit" id="event-add" class="event-button calendar-input-button" formmethod="post"
+                            formaction="schedule/event/add">Add
+                    </button>
+                    <button type="submit" id="event-delete" class="event-button calendar-input-button" formmethod="post"
+                            formaction="schedule/event/delete">Delete
+                    </button>
+                    <button type="submit" id="event-update" class="event-button calendar-input-button" formmethod="post"
+                            formaction="schedule/event/update">Update
+                    </button>
                 </div>
             </form>
         </div>

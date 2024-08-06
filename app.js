@@ -6,11 +6,9 @@ const app = express();
 require('dotenv').config()
 
 
-
 // Set routes => in /routes folder
 const indexRouter = require("./routes/index");
 const scheduleRouter = require('./routes/schedule')
-
 
 
 // Set viewing engine (ejs)
@@ -31,11 +29,9 @@ app.use(session({
 }));
 
 
-
 // Set routes
 app.use('/', indexRouter);
 app.use('/schedule', scheduleRouter);
-
 
 
 // Server listen

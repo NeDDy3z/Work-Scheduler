@@ -3,7 +3,6 @@ const router = express.Router();
 const calendar = require('../logic/calendar');
 
 
-
 function createEvent(date, from, to) {
     return {
         'summary': 'Erik',
@@ -18,7 +17,6 @@ function createEvent(date, from, to) {
 }
 
 
-
 // Check if user is authenticated
 function isAuthenticated(request, response, next) {
     if (request.session.loggedIn || process.env.DEBUG) {
@@ -30,11 +28,10 @@ function isAuthenticated(request, response, next) {
 }
 
 
-
 // GET - page (also check if user is loggedIn to be able to access this page)
 router.get('/', isAuthenticated, async (request, response) => {
     try {
-        let { year, month } = request.query;
+        let {year, month} = request.query;
         if (!year || !month) {
             year = new Date().getFullYear();
             month = new Date().getMonth() + 1;
@@ -43,11 +40,11 @@ router.get('/', isAuthenticated, async (request, response) => {
 
         if (!data) data = [];
         else {
-            data = data.filter(event => event.summary == 'Erik');
+            data = data.filter(event => event.summary === 'Erik');
             data = data.filter(event => event.description);
         }
 
-        response.status(200).render('pages/schedule', { data: data });
+        response.status(200).render('pages/schedule', {data: data});
     } catch (e) {
         response.status(500).send("Internal server error");
         console.log(e);
@@ -55,15 +52,14 @@ router.get('/', isAuthenticated, async (request, response) => {
 });
 
 
-
 // REQUESTS
 // Add Event
 router.post('/event/add', isAuthenticated, async (request, response) => {
     try {
-        const { date, from, to } = request.body;
+        const {date, from, to} = request.body;
         await calendar.addEvent(createEvent(date, from, to));
 
-        setTimeout(function() {
+        setTimeout(function () {
             response.status(200).redirect('/schedule');
         }, 750);
 
@@ -74,15 +70,13 @@ router.post('/event/add', isAuthenticated, async (request, response) => {
 });
 
 
-
-
 // Delete Event
 router.post('/event/delete', isAuthenticated, async (request, response) => {
     try {
-        const { id } = request.body;
+        const {id} = request.body;
         await calendar.deleteEvent(id);
 
-        setTimeout(function() {
+        setTimeout(function () {
             response.status(200).redirect('/schedule');
         }, 250);
     } catch (e) {
@@ -94,13 +88,13 @@ router.post('/event/delete', isAuthenticated, async (request, response) => {
 // Update Event
 router.post('/event/update', isAuthenticated, async (request, response) => {
     try {
-        const { date, from, to, id  } = request.body;
+        const {date, from, to, id} = request.body;
 
         //await calendar.deleteEvent(id);
         //await calendar.addEvent(createEvent(date, from, to));
         await calendar.updateEvent(id, createEvent(date, from, to));
 
-        setTimeout(function() {
+        setTimeout(function () {
             response.status(200).redirect('/schedule');
         }, 750);
     } catch (e) {
@@ -108,7 +102,6 @@ router.post('/event/update', isAuthenticated, async (request, response) => {
         console.log(e);
     }
 });
-
 
 
 module.exports = router;

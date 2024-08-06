@@ -14,7 +14,6 @@ const eventTimeFrom = document.getElementById('event-time-from');
 const eventTimeTo = document.getElementById('event-time-to');
 
 
-
 // Generate
 window.onload = () => {
     try {
@@ -23,14 +22,14 @@ window.onload = () => {
         if (document.cookie.includes('year') && document.cookie.includes('month')) {
             cookies.forEach(cookie => {
                     if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
-                    if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1 ;
+                    if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1;
                 }
             );
-        }
-        else throw "No cookies found";
+        } else throw "No cookies found";
+
 
     } catch (e) {
-        console.log("There was an error with loading cookies\n\n"+ e);
+        console.log("There was an error with loading cookies\n\n" + e);
 
         setCookie('year', new Date().getFullYear());
         setCookie('month', parseInt(new Date().getMonth()) + 1);
@@ -43,7 +42,6 @@ window.onload = () => {
 };
 
 
-
 // Set cookies
 function setCookie(name, value) {
     try {
@@ -51,10 +49,9 @@ function setCookie(name, value) {
 
         document.cookie = name + '=' + value + '; expires=' + date.toUTCString();
     } catch (e) {
-        console.log("There was an error with setting cookies\n\n"+ e);
+        console.log("There was an error with setting cookies\n\n" + e);
     }
 }
-
 
 
 // Subbmision
@@ -65,7 +62,7 @@ function dateSelectionSubmit() {
 
         document.getElementById('event-select').submit();
     } catch (e) {
-        console.log("There was an error with selecting date\n\n"+ e);
+        console.log("There was an error with selecting date\n\n" + e);
     }
 
 }
@@ -79,7 +76,6 @@ function generateCalendar() {
     let endDate = new Date(yr, mon + 1, 0);
 
 
-
     // Clear calendar
     let calendarBody = document.getElementById('calendar-body');
     calendarBody.innerHTML = '';
@@ -91,15 +87,14 @@ function generateCalendar() {
     currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1);
 
 
-    let hour_count = 0;
     // Fill calendar
     while (currentDate <= endDate || currentDate.getDay() !== 1) {
         let weekRow = document.createElement('tr');
 
         for (let i = 0; i < 7; i++) {
             // Set Google compatible date
-            let formattedDate = new Date(year.value, month.value-1, 2);
-            formattedDate = (new Date(formattedDate.setDate(currentDate.getDate()+1))).toISOString().split('T')[0];
+            let formattedDate = new Date(year.value, month.value - 1, 2);
+            formattedDate = (new Date(formattedDate.setDate(currentDate.getDate() + 1))).toISOString().split('T')[0];
 
             // Created day cell - insert button & day
             let dayCell = document.createElement('td');
@@ -108,10 +103,10 @@ function generateCalendar() {
 
             if (currentDate.getMonth() === mon) {
                 // Set buttons id to date & click event
-                button.id = formattedDate;
+                button.id = formattedDate.toString();
 
                 // Set day-date
-                day.textContent = currentDate.getDate();
+                day.textContent = currentDate.getDate().toString();
                 day.className = 'day';
 
                 button.append(day);
@@ -122,7 +117,7 @@ function generateCalendar() {
                 if (typeof events !== 'undefined') {
                     for (let event of events) {
                         // Fill calendar
-                        if (event.start.date === formattedDate && event.start.date.split('-')[0] == yr && event.start.date.split('-')[1] == mon+1) {
+                        if (event.start.date === formattedDate && event.start.date.split('-')[0] === yr && event.start.date.split('-')[1] === mon + 1) {
                             button.style.backgroundColor = 'hsla(0,0%,100%,0.05)';
 
                             let divTime = document.createElement('div');
@@ -157,7 +152,6 @@ function generateCalendar() {
 }
 
 
-
 // Open event for details and editing
 function eventOpen(button, from = null, to = null, id = null) {
     try {
@@ -183,8 +177,7 @@ function eventOpen(button, from = null, to = null, id = null) {
             eventId.value = id;
 
             addEventButton.style.display = 'none';
-        }
-        else {
+        } else {
             eventTimeFrom.value = '10:00'
             eventTimeTo.value = '18:00';
 
@@ -192,7 +185,7 @@ function eventOpen(button, from = null, to = null, id = null) {
             deleteEventButton.style.display = 'none';
         }
     } catch (e) {
-        console.log("There was an error with opening event\n\n"+ e);
+        console.log("There was an error with opening event\n\n" + e);
     }
 }
 
@@ -201,7 +194,7 @@ function eventClose() {
     try {
         eventContainer.style.display = 'none';
     } catch (e) {
-        console.log("There was an error with closing event\n\n"+ e);
+        console.log("There was an error with closing event\n\n" + e);
     }
 }
 

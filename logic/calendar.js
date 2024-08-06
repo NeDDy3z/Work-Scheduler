@@ -5,7 +5,6 @@ const {authenticate} = require('@google-cloud/local-auth');
 const {google} = require('googleapis');
 
 
-
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
@@ -13,7 +12,6 @@ const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
 const calendarId = process.env.CALENDAR_ID;
-
 
 
 // Load Credentials from token.json
@@ -71,13 +69,13 @@ async function getEventsAPI(auth, year, month) {
         timeMax: new Date(year, month, 1).toISOString(),
         maxResults: 31,
         singleEvents: true,
-        orderBy: 'startTime'
+        orderBy: 'startTime',
+        sendUpdates: 'none'
     });
 
     const events = res.data.items;
     if (!events || events.length === 0) {
         console.log('No upcoming events found.');
-        return;
     } else {
         console.log("Events requested: %s", events.length);
         return events;
@@ -90,6 +88,7 @@ async function addEventAPI(auth, event) {
     try {
         const res = await calendar.events.insert({
             calendarId: calendarId,
+            sendUpdates: 'none',
             resource: event
         });
         console.log("Event created");
@@ -105,6 +104,7 @@ async function deleteEventAPI(auth, id) {
     try {
         await calendar.events.delete({
             calendarId: calendarId,
+            sendUpdates: 'none',
             eventId: id
         });
         console.log("Event deleted");
@@ -120,6 +120,7 @@ async function updateEventAPI(auth, id, event) {
         const res = await calendar.events.update({
             calendarId: calendarId,
             eventId: id,
+            sendUpdates: 'none',
             resource: event
         });
         console.log("Event updated");
@@ -145,4 +146,4 @@ function updateEvent(id, event) {
     return authorize().then(auth => updateEventAPI(auth, id, event)).catch(console.error);
 }
 
-module.exports = { getEvents, addEvent, deleteEvent, updateEvent };
+module.exports = {getEvents, addEvent, deleteEvent, updateEvent};

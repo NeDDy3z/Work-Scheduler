@@ -33,10 +33,6 @@ input::-webkit-inner-spin-button {
 }
 
 
-
-
-
-
 /* CALENDAR */
 .calendar {
     display: flex;
@@ -124,16 +120,11 @@ input::-webkit-inner-spin-button {
 }
 
 
-
-
-
 /* TOOLS */
 #calendar-tools {
     display: flex;
     justify-content: space-evenly;
 }
-
-
 
 
 /* Event Editor */
@@ -165,7 +156,6 @@ input::-webkit-inner-spin-button {
 }
 
 
-
 #event-container #event-time {
     display: flex;
     flex-direction: row;
@@ -191,7 +181,6 @@ input::-webkit-inner-spin-button {
 #event-container .event-time-input:focus {
     outline: none;
 }
-
 
 
 #event-container #event-controls {

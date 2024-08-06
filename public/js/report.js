@@ -5,7 +5,6 @@ const reportHours = document.getElementById('counter');
 const reportMoney = document.getElementById('money');
 
 
-
 // Fill report table
 function reportFillData(year, month) {
     try {
@@ -13,14 +12,14 @@ function reportFillData(year, month) {
 
         events.forEach(event => {
             if (event.start.date.includes(year) &&
-                event.start.date.split('-')[1] == month &&
-                event.summary == 'Erik' &&
+                event.start.date.split('-')[1] === month &&
+                event.summary === 'Erik' &&
                 typeof event.description !== 'undefined') {
                 reportTable.innerHTML += `
                 <tr class="report-table-row">
                     <td><input type="text" id="report-table-date" value="${shortDate(event.start.date)}"></td>
                     <td><input type="time" id="report-table-from" min="09:00" max="19:00" onchange="reportUpdate()" value="${event.description.split(';')[0]}"></td>
-                    <td><input type="time" id="report-table-to" min="09:00" max="19:00" onchange="reportUpdate()"value="${event.description.split(';')[1]}"></td>
+                    <td><input type="time" id="report-table-to" min="09:00" max="19:00" onchange="reportUpdate()" value="${event.description.split(';')[1]}"></td>
                     <td><input type="text" class="report-table-hour" value="${timeToDecimal(event.description.split(';')[1]) - timeToDecimal(event.description.split(';')[0])}" readonly></td>
                 </tr>
                 `;
@@ -29,10 +28,10 @@ function reportFillData(year, month) {
             }
         });
 
-        reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
-        reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-'
+        reportHours.innerHTML = 'Celkem: <span>' + hourCount.toFixed(2) + '</span> h';
+        reportMoney.innerHTML = 'Součet: <span>' + (parseFloat(hourCount) * 175).toFixed(2) + '</span> Kč,-'
     } catch (e) {
-        console.log("There was an error fillling the report table:\n" + e);
+        console.log("There was an error filling the report table:\n" + e);
     }
 }
 
@@ -46,8 +45,8 @@ function reportExport() {
             row.querySelector('.report-table-hour').value = hour;
         });
 
-        reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
-        reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-';
+        reportHours.innerHTML = 'Celkem: <span>' + hourCount.toFixed(2) + '</span> h';
+        reportMoney.innerHTML = 'Součet: <span>' + (parseFloat(hourCount) * 175).toFixed(2) + '</span> Kč,-';
 
         reportDiv.style.visibility = "visible";
         reportDiv.className = '';
@@ -68,8 +67,8 @@ function reportUpdate() {
         row.querySelector('.report-table-hour').value = hour.toFixed(2);
     });
 
-    reportHours.innerHTML = 'Celkem: <span>'+ hourCount.toFixed(2) +'</span> h';
-    reportMoney.innerHTML = 'Součet: <span>'+ (parseFloat(hourCount) * 175).toFixed(2) +'</span> Kč,-';
+    reportHours.innerHTML = 'Celkem: <span>' + hourCount.toFixed(2) + '</span> h';
+    reportMoney.innerHTML = 'Součet: <span>' + (parseFloat(hourCount) * 175).toFixed(2) + '</span> Kč,-';
 }
 
 // Open report
@@ -84,7 +83,6 @@ function reportClose() {
     reportDiv.style.visibility = "hidden";
     reportDiv.className = '';
 }
-
 
 
 // Shorten the date

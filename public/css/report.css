@@ -57,7 +57,6 @@
 }
 
 
-
 #sum {
     padding-top: .3rem;
     padding-left: 3rem;
@@ -70,8 +69,6 @@
 #sum span {
     font-weight: bold;
 }
-
-
 
 
 /* Editing */
@@ -103,7 +100,6 @@
 
     background-color: var(--background);
 }
-
 
 
 /* Responsive */

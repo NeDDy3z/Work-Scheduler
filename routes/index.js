@@ -17,7 +17,7 @@ router.get('/', (request, response) => {
         }
     } catch (e) {
         // Error => 500
-        response.status(500).send("Internal server error", e);
+        response.status(500).send("Internal server error: "+ e);
     }
 });
 
@@ -30,7 +30,7 @@ router.post('/', (request, response) => {
         password = request.body.password;
     } catch (e) {
         // No password => bad request
-        response.render('/', { msg : 'No password was: entered / recieved by the server'});
+        response.render('/', { msg : 'No password was: entered / received by the server'});
     }
 
     try {
@@ -47,7 +47,7 @@ router.post('/', (request, response) => {
         }
     } catch (e) {
         // Error => 500
-        response.status(500).send("Internal server error", e);
+        response.status(500).send("Internal server error: "+ e);
     }
 
 });
