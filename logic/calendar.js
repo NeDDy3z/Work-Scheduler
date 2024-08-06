@@ -22,8 +22,8 @@ async function authorize() {
     const content = await fs.readFile(CREDENTIALS_PATH);
     const credentials = JSON.parse(content);
     const oAuth2Client = new OAuth2Client(
-        credentials.installed.client_id,
-        credentials.installed.client_secret,
+        credentials.web.client_id,
+        credentials.web.client_secret,
         // Redirect URI (replace with your backend server's URL)
         'https://work-scheduler.up.railway.app/schedule' // Update with your redirect URI
     );
