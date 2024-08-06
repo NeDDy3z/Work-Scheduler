@@ -1,9 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
-const { authenticate } = require('@google-cloud/local-auth');
-const { google } = require('googleapis');
-const { OAuth2Client } = require('google-auth');
+const {authenticate} = require('@google-cloud/local-auth');
+const {google} = require('googleapis');
 
 
 
@@ -13,8 +12,11 @@ const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
 
 // Calendar ID
-const calendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
+const DEBUGcalendarId = 'bf04585b083f65056d81e869f1fdafe5507dbfe90984b098c210ed2b7f1d04df@group.calendar.google.com';
+const WORKcalendarId = '954603196a55e983b4a378024770523dc8e28c74b87bd204c4ce9f58300dfd35@group.calendar.google.com';
 
+//const calendarId = DEBUGcalendarId;
+const calendarId = WORKcalendarId;
 
 
 // Load Credentials from token.json
@@ -44,28 +46,18 @@ async function saveCredentials(client) {
 
 // Load or request or authorization to call APIs.
 async function authorize() {
-    const content = await fs.readFile(CREDENTIALS_PATH);
-    const credentials = JSON.parse(content);
-    const oAuth2Client = new OAuth2Client(
-        credentials.installed.client_id,
-        credentials.installed.client_secret,
-        // Redirect URI (replace with your backend server's URL)
-        'https://work-scheduler.up.railway.app/schedule' // Update with your redirect URI
-    );
-
-    // Check if refresh token exists
-    if (credentials.refresh_token) {
-        oAuth2Client.setCredentials({ refresh_token: credentials.refresh_token });
+    let client = await loadSavedCredentialsIfExist();
+    if (client) {
+        return client;
     }
-
-    try {
-        const tokens = await oAuth2Client.getAccessToken();
-        oAuth2Client.setCredentials(tokens);
-        return oAuth2Client;
-    } catch (err) {
-        console.error('Error retrieving access token:', err);
-        return null;
+    client = await authenticate({
+        scopes: SCOPES,
+        keyfilePath: CREDENTIALS_PATH,
+    });
+    if (client.credentials) {
+        await saveCredentials(client);
     }
+    return client;
 }
 
 
