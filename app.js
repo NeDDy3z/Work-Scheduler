@@ -1,13 +1,18 @@
-// Set dependencies & declare constants
 const express = require('express');
-const path = require('path');
 const session = require('express-session');
-const app = express();
+const path = require('path');
+const config = require('./config');
 require('dotenv').config()
+
+
+const app = express();
+const port = process.env.PORT || 3000;
+
 
 
 // Set routes => in /routes folder
 const indexRouter = require("./routes/index");
+const authenticationRouter = require('./routes/authentication');
 const scheduleRouter = require('./routes/schedule')
 
 
@@ -22,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session middleware
 app.use(session({
-    secret: process.env.SECRET,
+    secret: config.secret,
     resave: false,
     saveUninitialized: true,
     //cookie: { secure: false } // Use true if HTTPS
@@ -31,10 +36,13 @@ app.use(session({
 
 // Set routes
 app.use('/', indexRouter);
+app.use('/authentication', authenticationRouter.router);
 app.use('/schedule', scheduleRouter);
 
 
+
 // Server listen
-app.listen(port = process.env.PORT || 3000, () => {
+app.listen(port, () => {
     console.log(`Server is listening at http://localhost:${port}`);
 });
+

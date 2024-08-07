@@ -1,0 +1,74 @@
+const express = require('express');
+const router = express.Router();
+const { google } = require('googleapis');
+const { OAuth2Client } = require('google-auth-library');
+const crypto = require('crypto');
+const config = require('../config');
+
+// OAuth2 client setup
+const scope= 'https://www.googleapis.com/auth/calendar';
+const oauth2Client = new google.auth.OAuth2(
+    config.client_id,
+    config.client_secret,
+    config.redirect_uri
+);
+
+
+
+// Check if user is authenticated
+function isAuthenticated(req, res, next) {
+    if (req.session.loggedIn || process.env.BYPASS_LOGIN) {
+        return next();
+    } else {
+        // Not logged in => redirect back to index page
+        res.status(403).redirect('/');
+    }
+}
+
+
+// Middleware to ensure the user is authenticated
+function ensureAuthenticated(req, res, next) {
+    if (req.session.tokens) {
+        oauth2Client.setCredentials(req.session.tokens);
+        next();
+    } else {
+        res.redirect('/authenticate');
+    }
+}
+
+
+
+// GET - page (also check if user is loggedIn to be able to access this page)
+router.get('/', isAuthenticated, async (req, res) => {
+    const state = crypto.randomBytes(32).toString('hex');
+    req.session.state = state;
+
+    const authUrl = oauth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: scope,
+        include_granted_scopes: true,
+        state: state
+    });
+
+    res.redirect(authUrl);
+});
+
+// OAuth2 callback
+router.get('/oauth2callback', async (req, res) => {
+    const { code } = req.query;
+    const { tokens } = await oauth2Client.getToken(code);
+
+    oauth2Client.setCredentials(tokens);
+    req.session.tokens = tokens;
+    const userCredentials = tokens;
+
+    res.status(200).redirect('/schedule');
+});
+
+
+
+module.exports = { router, oauth2Client };
+
+
+
+

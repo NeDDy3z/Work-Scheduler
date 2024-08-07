@@ -1,6 +1,11 @@
+# Stuff
 .git
 .idea
-.env
 
+# Config files
+.env
+config_secret.js
+
+# Calendar API related
 credentials.json
 token.json

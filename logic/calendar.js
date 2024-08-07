@@ -1,68 +1,20 @@
-const fs = require('fs').promises;
-const path = require('path');
-const process = require('process');
-const {authenticate} = require('@google-cloud/local-auth');
-const {google} = require('googleapis');
-
-
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-const TOKEN_PATH = path.join(process.cwd(), 'logic/api/token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'logic/api/credentials.json');
+const { google } = require('googleapis');
+const config = require('../config');
+const { oauth2Client } = require('../routes/authentication');
 
 // Calendar ID
-const calendarId = process.env.CALENDAR_ID;
+const calendarId = config.calendar_id;
 
 
-// Load Credentials from token.json
-async function loadSavedCredentialsIfExist() {
-    try {
-        const content = await fs.readFile(TOKEN_PATH);
-        const credentials = JSON.parse(content);
-        return google.auth.fromJSON(credentials);
-    } catch (err) {
-        return null;
-    }
-}
-
-// Save credentials to token.json
-async function saveCredentials(client) {
-    const content = await fs.readFile(CREDENTIALS_PATH);
-    const keys = JSON.parse(content);
-    const key = keys.installed || keys.web;
-    const payload = JSON.stringify({
-        type: 'authorized_user',
-        client_id: key.client_id,
-        client_secret: key.client_secret,
-        refresh_token: client.credentials.refresh_token,
-    });
-    await fs.writeFile(TOKEN_PATH, payload);
-}
-
-// Load or request authorization to call APIs.
-async function authorize() {
-    let client = await loadSavedCredentialsIfExist();
-    if (client) {
-        return client;
-    }
-    client = await authenticate({
-        scopes: SCOPES,
-        keyfilePath: CREDENTIALS_PATH,
-    });
-    if (client.credentials) {
-        await saveCredentials(client);
-    }
-    return client;
-}
 
 // Get events
-async function getEventsAPI(auth, year, month) {
+async function getEvents(year, month) {
     if (!year || !month) {
         year = new Date().getFullYear();
         month = new Date().getMonth() + 1;
     }
 
-    const calendar = google.calendar({version: 'v3', auth});
+    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
     const res = await calendar.events.list({
         calendarId: calendarId,
         timeMin: new Date(year, month - 1, 1).toISOString(),
@@ -83,8 +35,8 @@ async function getEventsAPI(auth, year, month) {
 }
 
 // Add event
-async function addEventAPI(auth, event) {
-    const calendar = google.calendar({version: 'v3', auth});
+async function addEvent(event) {
+    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
     try {
         const res = await calendar.events.insert({
             calendarId: calendarId,
@@ -99,8 +51,8 @@ async function addEventAPI(auth, event) {
 }
 
 // Delete event
-async function deleteEventAPI(auth, id) {
-    const calendar = google.calendar({version: 'v3', auth});
+async function deleteEvent(id) {
+    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
     try {
         await calendar.events.delete({
             calendarId: calendarId,
@@ -114,8 +66,8 @@ async function deleteEventAPI(auth, id) {
 }
 
 // Update event
-async function updateEventAPI(auth, id, event) {
-    const calendar = google.calendar({version: 'v3', auth});
+async function updateEvent(id, event) {
+    const calendar = google.calendar({version: 'v3', auth: oauth2Client});
     try {
         const res = await calendar.events.update({
             calendarId: calendarId,
@@ -130,20 +82,37 @@ async function updateEventAPI(auth, id, event) {
     }
 }
 
-function getEvents(year, month) {
-    return authorize().then(auth => getEventsAPI(auth, year, month)).catch(console.error);
-}
-
-function addEvent(event) {
-    return authorize().then(auth => addEventAPI(auth, event)).catch(console.error);
-}
-
-function deleteEvent(id) {
-    return authorize().then(auth => deleteEventAPI(auth, id)).catch(console.error);
-}
-
-function updateEvent(id, event) {
-    return authorize().then(auth => updateEventAPI(auth, id, event)).catch(console.error);
-}
 
 module.exports = {getEvents, addEvent, deleteEvent, updateEvent};
+
+
+
+
+
+
+
+// Example route to get calendar events
+/*
+app.get('/events', ensureAuthenticated, async (req, res) => {
+    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+    const events = await calendar.events.list({ calendarId: 'primary' });
+    res.json(events.data.items);
+});
+
+// Example route to add a calendar event
+app.post('/events', ensureAuthenticated, express.json(), async (req, res) => {
+    const { summary, description, start, end } = req.body;
+    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+    const event = {
+        summary,
+        description,
+        start: { dateTime: start },
+        end: { dateTime: end },
+    };
+    const response = await calendar.events.insert({
+        calendarId: 'primary',
+        resource: event,
+    });
+    res.json(response.data);
+});
+*/

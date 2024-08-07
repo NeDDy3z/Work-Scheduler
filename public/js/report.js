@@ -12,8 +12,8 @@ function reportFillData(year, month) {
 
         events.forEach(event => {
             if (event.start.date.includes(year) &&
-                event.start.date.split('-')[1] === month &&
-                event.summary === 'Erik' &&
+                event.start.date.split('-')[1] == month &&
+                event.summary == 'Erik' &&
                 typeof event.description !== 'undefined') {
                 reportTable.innerHTML += `
                 <tr class="report-table-row">
