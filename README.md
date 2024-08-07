@@ -25,7 +25,7 @@ To see the deployed application **[click here](https://work-scheduler.up.railway
 
 
 ## Technical documentation
-- detailed documentation and more about project's functionality, **[is here](./docs/DOCUMENTATION.md)**
+- more detailed documentation of this project, is available **[here](./docs/DOCUMENTATION.md)**
 
 ## License
 Do not redistribute. All rights reserved.
