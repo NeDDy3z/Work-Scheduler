@@ -1,6 +1,7 @@
 # Stuff
-.git
-.idea
+/.git
+/.idea
+/node_modules
 
 # Config files
 .env
