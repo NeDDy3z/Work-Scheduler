@@ -7,10 +7,10 @@
     // Load events from server to access it via JS
     const events = JSON.parse(JSON.stringify(<%- JSON.stringify(data) %>, null, 2));
 </script>
-<header>
-    <h1><a href="">Work Scheduler</a></h1>
-</header>
 <main>
+    <header>
+        <h1><a href="">Work Scheduler</a></h1>
+    </header>
     <div class="calendar-selection">
         <form action="" method="get" id="event-select">
             <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024"
