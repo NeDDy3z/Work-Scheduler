@@ -101,7 +101,7 @@ function generateCalendar() {
             let button = document.createElement('button');
             let day = document.createElement('p');
 
-            if (currentDate.getMonth() === mon) {
+            if (currentDate.getMonth() == mon) {
                 // Set buttons id to date & click event
                 button.id = formattedDate.toString();
 
@@ -117,7 +117,7 @@ function generateCalendar() {
                 if (typeof events !== 'undefined') {
                     for (let event of events) {
                         // Fill calendar
-                        if (event.start.date === formattedDate && event.start.date.split('-')[0] === yr && event.start.date.split('-')[1] === mon + 1) {
+                        if (event.start.date == formattedDate && event.start.date.split('-')[0] == yr && event.start.date.split('-')[1] == mon + 1) {
                             button.style.backgroundColor = 'hsla(0,0%,100%,0.05)';
 
                             let divTime = document.createElement('div');
