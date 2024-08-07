@@ -6,7 +6,7 @@ To see the deployed application **[click here](https://work-scheduler.up.railway
 ## Features
 - add/remove/edit events to your google calendar 📅
 - track your hourly attendance 🕐
-- edit and export a report of your attendance to PDF 📁
+- edit and export a report of your attendance to PDF 🔖
 - communication with Google API 🛰️
 - session login 🔒
 
