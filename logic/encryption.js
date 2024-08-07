@@ -1,10 +1,9 @@
 const crypto = require('crypto');
-const config = require('../config_secret');
+const config = require(process.env.CONFIG_PATH || '../config');
 
-
-// Define the constant secret key and IV
 const secretKey = Buffer.from(config.secret_key, 'hex');
 const iv = Buffer.from(config.iv, 'hex');
+
 
 
 // Encrypt data
@@ -21,8 +20,9 @@ function encrypt(text) {
 }
 
 // Test
-//console.log(crypto.randomBytes(32).toString('hex'), crypto.randomBytes(16).toString('hex'));
+// crypto.randomBytes(32).toString('hex');
 //console.log(encrypt("Password"));
+
 
 
 module.exports = encrypt

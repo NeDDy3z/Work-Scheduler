@@ -61,7 +61,7 @@
                     <p id="event-date-p"></p>
                     <input type="text" id="event-date" name="date" hidden>
                     <input type="text" id="event-id" name="id" hidden>
-                    <button onclick="eventClose()" id="event-close">X</button>
+                    <button onclick="eventClose()" id="event-close" type="button" >X</button>
                 </div>
                 <div id="event-time">
                     <input type="time" id="event-time-from" class="event-time-input" name="from" min="09:00" max="19:00"
@@ -71,13 +71,13 @@
                            required>
                 </div>
                 <div id="event-controls">
-                    <button type="submit" id="event-add" class="event-button calendar-input-button" formmethod="post"
+                    <button type="submit" id="event-add" class="event-button calendar-input-button" type="submit" formmethod="post"
                             formaction="schedule/event/add">Add
                     </button>
-                    <button type="submit" id="event-delete" class="event-button calendar-input-button" formmethod="post"
+                    <button type="submit" id="event-delete" class="event-button calendar-input-button" type="submit" formmethod="post"
                             formaction="schedule/event/delete">Delete
                     </button>
-                    <button type="submit" id="event-update" class="event-button calendar-input-button" formmethod="post"
+                    <button type="submit" id="event-update" class="event-button calendar-input-button" type="submit" formmethod="post"
                             formaction="schedule/event/update">Update
                     </button>
                 </div>
@@ -87,8 +87,8 @@
 
     <div id="report-container">
         <div id="report-controls">
-            <button id="report-add" class="event-button calendar-input-button" onclick="reportExport()">Export</button>
-            <button id="report-close" class="event-button calendar-input-button" onclick="reportClose()">X</button>
+            <button id="report-add" class="event-button calendar-input-button" type="button" onclick="reportExport()">Export</button>
+            <button id="report-close" class="event-button calendar-input-button" type="button" onclick="reportClose()">X</button>
         </div>
         <div id="report" class="">
             <table id="report-table">
@@ -111,7 +111,7 @@
         </div>
     </div>
 
-    <button onclick="toggleDebug()" id="login-submit" style="color: lightgray; font-size: 10px">Debug</button>
+    <button onclick="toggleDebug()" class="submit-button" type="button" style="color: lightgray; font-size: 10px;">Debug</button>
 
     <div id="events-debug" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey;">
         <%# Display events %>

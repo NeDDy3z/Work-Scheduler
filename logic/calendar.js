@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const config = require('../config');
+const config = require(process.env.CONFIG_PATH || '../config');
 const authentication= require('../routes/authentication');
 
 // Calendar ID

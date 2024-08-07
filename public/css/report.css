@@ -1,5 +1,6 @@
 #report-container {
     visibility: hidden;
+    overflow: revert;
 
     position: absolute;
     top: 0;
@@ -73,8 +74,9 @@
 
 /* Editing */
 .report-editing {
-    margin-top: 17rem;
-
+    position: relative !important;
+    top: auto;
+    
     display: flex;
     flex-direction: column;
 }

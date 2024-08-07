@@ -195,6 +195,8 @@ function eventClose() {
         eventContainer.style.display = 'none';
     } catch (e) {
         console.log("There was an error with closing event\n\n" + e);
+    } finally {
+        return false;
     }
 }
 

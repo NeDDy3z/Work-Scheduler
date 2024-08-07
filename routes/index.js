@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const encrypt = require('../logic/encryption');
-const config = require('../config');
+const config = require(process.env.CONFIG_PATH || '../config');
 
 
 
@@ -9,7 +9,7 @@ const config = require('../config');
 router.get('/', (req, res) => {
     try {
         // If user is already logged in => redirect to schedule
-        if (req.session.loggedIn) {
+        if (req.session.loggedIn || process.env.BYPASS_LOGIN == true) {
             res.status(200).redirect('/schedule');
         }
         else {

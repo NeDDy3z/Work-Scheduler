@@ -21,7 +21,7 @@ function createEvent(date, from, to) {
 
 // Check if user is authenticated
 function isAuthenticated(req, res, next) {
-    if (req.session.loggedIn || process.env.BYPASS_LOGIN) {
+    if (req.session.loggedIn || process.env.BYPASS_LOGIN == true) {
         return next();
     } else {
         // Not logged in => redirect back to index page

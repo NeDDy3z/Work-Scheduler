@@ -8,5 +8,7 @@
 config_secret.js
 
 # Calendar API related
+/data
+/data/token.json
 credentials.json
 token.json

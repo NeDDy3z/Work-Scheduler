@@ -1,9 +1,13 @@
+const calendarSelection = document.getElementsByClassName('calendar-selection')[0];
+const calendar = document.getElementsByClassName('calendar')[0];
+
 const reportDiv = document.getElementById('report-container');
 const reportControls = document.getElementById('report-controls');
 const reportTable = document.getElementById('report-table');
 const reportHours = document.getElementById('counter');
 const reportMoney = document.getElementById('money');
 
+const debugButton = document.getElementsByClassName('submit-button')[0];
 
 // Fill report table
 function reportFillData(year, month) {
@@ -48,11 +52,14 @@ function reportExport() {
         reportHours.innerHTML = 'Celkem: <span>' + hourCount.toFixed(2) + '</span> h';
         reportMoney.innerHTML = 'Součet: <span>' + (parseFloat(hourCount) * 175).toFixed(2) + '</span> Kč,-';
 
+
+
+        reportClose();
         reportDiv.style.visibility = "visible";
-        reportDiv.className = '';
-        reportControls.style.display = "none";
+        debugButton.style.visibility = "hidden";
         window.print();
         reportDiv.style.visibility = "hidden";
+        debugButton.style.visibility = "visible";
     } catch (e) {
         console.log("There was an error exporting the report:\n" + e);
     }
@@ -73,14 +80,21 @@ function reportUpdate() {
 
 // Open report
 function reportOpen() {
+    calendarSelection.style.display = "none";
+    calendar.style.display = "none";
+
     reportDiv.style.visibility = "visible";
-    reportDiv.className = 'report-editing';
     reportControls.style.display = "block";
+    reportDiv.className = 'report-editing';
 }
 
 // Close report
 function reportClose() {
+    calendarSelection.style.display = "flex";
+    calendar.style.display = "flex";
+
     reportDiv.style.visibility = "hidden";
+    reportControls.style.display = "none";
     reportDiv.className = '';
 }
 

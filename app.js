@@ -1,12 +1,13 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const config = require('./config');
+const arguments = require('./logic/arguments');
+const config = require(process.env.CONFIG_PATH || './config');
 require('dotenv').config()
-
 
 const app = express();
 const port = process.env.PORT || 3000;
+const args = process.argv.slice(2);
 
 
 

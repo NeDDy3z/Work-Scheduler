@@ -50,7 +50,7 @@
     outline: none;
 }
 
-#login-submit {
+.submit-button {
     padding: .5rem;
 
     border: none;
@@ -64,7 +64,7 @@
     color: var(--text);
 }
 
-#login-submit:hover, #login-submit:focus {
+.submit-button:hover, .submit-button:focus {
     color: var(--button);
 }
 
@@ -80,7 +80,7 @@
         width: 11rem;
     }
 
-    #login-submit {
+    .submit-button {
         width: 9rem;
     }
 }
