@@ -1,6 +1,6 @@
 const { google } = require('googleapis');
 const config = require('../config');
-const { oauth2Client } = require('../routes/authentication');
+const authentication= require('../routes/authentication');
 
 // Calendar ID
 const calendarId = config.calendar_id;
@@ -14,7 +14,7 @@ async function getEvents(year, month) {
         month = new Date().getMonth() + 1;
     }
 
-    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
+    const calendar = google.calendar({version: 'v3', auth: authentication.oauth2Client });
     const res = await calendar.events.list({
         calendarId: calendarId,
         timeMin: new Date(year, month - 1, 1).toISOString(),
@@ -36,7 +36,7 @@ async function getEvents(year, month) {
 
 // Add event
 async function addEvent(event) {
-    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
+    const calendar = google.calendar({version: 'v3', auth: authentication.oauth2Client });
     try {
         const res = await calendar.events.insert({
             calendarId: calendarId,
@@ -52,7 +52,7 @@ async function addEvent(event) {
 
 // Delete event
 async function deleteEvent(id) {
-    const calendar = google.calendar({version: 'v3', auth: oauth2Client });
+    const calendar = google.calendar({version: 'v3', auth: authentication.oauth2Client });
     try {
         await calendar.events.delete({
             calendarId: calendarId,
@@ -67,7 +67,7 @@ async function deleteEvent(id) {
 
 // Update event
 async function updateEvent(id, event) {
-    const calendar = google.calendar({version: 'v3', auth: oauth2Client});
+    const calendar = google.calendar({version: 'v3', auth: authentication.oauth2Client});
     try {
         const res = await calendar.events.update({
             calendarId: calendarId,
@@ -94,7 +94,7 @@ module.exports = {getEvents, addEvent, deleteEvent, updateEvent};
 // Example route to get calendar events
 /*
 app.get('/events', ensureAuthenticated, async (req, res) => {
-    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+    const calendar = google.calendar({ version: 'v3', auth: authentication.oauth2Client });
     const events = await calendar.events.list({ calendarId: 'primary' });
     res.json(events.data.items);
 });
@@ -102,7 +102,7 @@ app.get('/events', ensureAuthenticated, async (req, res) => {
 // Example route to add a calendar event
 app.post('/events', ensureAuthenticated, express.json(), async (req, res) => {
     const { summary, description, start, end } = req.body;
-    const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+    const calendar = google.calendar({ version: 'v3', auth: authentication.oauth2Client });
     const event = {
         summary,
         description,

@@ -1,3 +1,18 @@
+.title-container {
+    width: 100vw;
+    padding: 2rem;
+}
+
+.title-container h1, .title-container h4 {
+    text-align: center;
+}
+
+.title-container h4 {
+    font-weight: 400;
+}
+
+
+
 #login-error {
     text-align: center;
 }

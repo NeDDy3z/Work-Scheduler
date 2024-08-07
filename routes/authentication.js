@@ -12,6 +12,7 @@ const oauth2Client = new google.auth.OAuth2(
     config.client_secret,
     config.redirect_uri
 );
+let userCredentials;
 
 
 
@@ -29,7 +30,9 @@ function isAuthenticated(req, res, next) {
 // Middleware to ensure the user is authenticated
 function ensureAuthenticated(req, res, next) {
     if (req.session.tokens) {
-        oauth2Client.setCredentials(req.session.tokens);
+        if (req.session.tokens) oauth2Client.setCredentials(req.session.tokens);
+        else if (userCredentials) oauth2Client.setCredentials(userCredentials);
+
         next();
     } else {
         res.redirect('/authenticate');
@@ -40,34 +43,42 @@ function ensureAuthenticated(req, res, next) {
 
 // GET - page (also check if user is loggedIn to be able to access this page)
 router.get('/', isAuthenticated, async (req, res) => {
-    const state = crypto.randomBytes(32).toString('hex');
-    req.session.state = state;
+    try {
+        const state = crypto.randomBytes(32).toString('hex');
+        req.session.state = state;
 
-    const authUrl = oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: scope,
-        include_granted_scopes: true,
-        state: state
-    });
+        const authUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: scope,
+            include_granted_scopes: true,
+            state: state
+        });
 
-    res.redirect(authUrl);
+        res.redirect(authUrl);
+    } catch (e) {
+        res.status(500).send("Internal server error: "+ e);
+    }
 });
 
 // OAuth2 callback
-router.get('/oauth2callback', async (req, res) => {
-    const { code } = req.query;
-    const { tokens } = await oauth2Client.getToken(code);
+router.get('/oauth2callback', isAuthenticated, async (req, res) => {
+    try {
+        const { code } = req.query;
+        const { tokens } = await oauth2Client.getToken(code);
 
-    oauth2Client.setCredentials(tokens);
-    req.session.tokens = tokens;
-    const userCredentials = tokens;
+        oauth2Client.setCredentials(tokens);
+        req.session.tokens = tokens;
+        userCredentials = tokens;
 
-    res.status(200).redirect('/schedule');
+        res.status(200).redirect('/schedule');
+    } catch (e) {
+        res.status(500).send("Internal server error: "+ e);
+    }
 });
 
 
 
-module.exports = { router, oauth2Client };
+module.exports = { router, oauth2Client, ensureAuthenticated };
 
 
 

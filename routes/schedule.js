@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const calendar = require('../logic/calendar');
-
+const authentication = require('../routes/authentication');
 
 
 function createEvent(date, from, to) {
@@ -32,7 +32,7 @@ function isAuthenticated(req, res, next) {
 
 
 // GET - page (also check if user is loggedIn to be able to access this page)
-router.get('/', isAuthenticated, async (req, res) => {
+router.get('/', isAuthenticated, authentication.ensureAuthenticated, async (req, res) => {
     try {
         let {year, month} = req.query;
         if (!year || !month) {
@@ -55,7 +55,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 });
 
 // Add Event
-router.post('/event/add', isAuthenticated, async (req, res) => {
+router.post('/event/add', isAuthenticated, authentication.ensureAuthenticated, async (req, res) => {
     try {
         const {date, from, to} = req.body;
         await calendar.addEvent(createEvent(date, from, to));
@@ -71,7 +71,7 @@ router.post('/event/add', isAuthenticated, async (req, res) => {
 });
 
 // Delete Event
-router.post('/event/delete', isAuthenticated, async (req, res) => {
+router.post('/event/delete', isAuthenticated, authentication.ensureAuthenticated, async (req, res) => {
     try {
         const {id} = req.body;
         await calendar.deleteEvent(id);
@@ -86,7 +86,7 @@ router.post('/event/delete', isAuthenticated, async (req, res) => {
 });
 
 // Update Event
-router.post('/event/update', isAuthenticated, async (req, res) => {
+router.post('/event/update', isAuthenticated, authentication.ensureAuthenticated, async (req, res) => {
     try {
         const {date, from, to, id} = req.body;
 

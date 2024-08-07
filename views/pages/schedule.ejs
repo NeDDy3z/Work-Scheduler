@@ -7,7 +7,7 @@
     // Load events from server to access it via JS
     const events = JSON.parse(JSON.stringify(<%- JSON.stringify(data) %>, null, 2));
 </script>
-<header class="title-container">
+<header>
     <h1><a href="">Work Scheduler</a></h1>
 </header>
 <main>
@@ -127,6 +127,8 @@
         } %>
     </div>
 </main>
+<%# Import <footer></footer> %>
+<%- include('../partials/footer'); %>
 <script>
     // Open close debug events
     const debug = document.getElementById('events-debug');
