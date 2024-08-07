@@ -113,7 +113,7 @@
 
     <button onclick="toggleDebug()" id="login-submit" style="color: lightgray; font-size: 10px">Debug</button>
 
-    <div id="events-debug" style="display: none; font-family: 'Consolas'">
+    <div id="events-debug" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey;">
         <%# Display events %>
         <% if (typeof data !== 'undefined') {
         for (var i = 0; i < data.length; i++) {
