@@ -7,7 +7,7 @@ const reportTable = document.getElementById('report-table');
 const reportHours = document.getElementById('counter');
 const reportMoney = document.getElementById('money');
 
-const debugButton = document.getElementsByClassName('submit-button')[0];
+const hideOnExport = document.querySelectorAll('.hide-on-export');
 
 // Fill report table
 function reportFillData(year, month) {
@@ -56,10 +56,14 @@ function reportExport() {
 
         reportClose();
         reportDiv.style.visibility = "visible";
-        debugButton.style.visibility = "hidden";
+        for (i = 0; i < hideOnExport.length; i++) {
+            hideOnExport[i].style.visibility = "hidden";
+        }
         window.print();
+        for (i = 0; i < hideOnExport.length; i++) {
+            hideOnExport[i].style.visibility = "visible";
+        }
         reportDiv.style.visibility = "hidden";
-        debugButton.style.visibility = "visible";
     } catch (e) {
         console.log("There was an error exporting the report:\n" + e);
     }

@@ -11,7 +11,7 @@
     <header>
         <h1><a href="">Work Scheduler</a></h1>
     </header>
-    <div class="calendar-selection">
+    <div class="calendar-selection hide-on-export">
         <form action="" method="get" id="event-select">
             <input type="number" id="year" name="year" maxlength="4" min="2024" max="2030" value="2024"
                    onchange="dateSelectionSubmit()" required>
@@ -32,7 +32,7 @@
         </form>
     </div>
 
-    <div class="calendar">
+    <div class="calendar hide-on-export">
         <table>
             <thead>
             <tr>
@@ -111,14 +111,14 @@
         </div>
     </div>
 
-    <button onclick="toggleDebug()" class="submit-button" type="button" style="color: lightgray; font-size: 10px;">Debug</button>
+    <button onclick="toggleDebug()" class="submit-button hide-on-export" type="button" style="color: lightgray; font-size: 10px;">Debug</button>
 
-    <div id="events-debug" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey; width: 20rem">
+    <div id="events-debug" class="hide-on-export" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey;">
         <%# Display events %>
         <% if (typeof data !== 'undefined') {
         for (var i = 0; i < data.length; i++) {
             var event = data[i]; %>
-        <div style="display: flex; justify-content: space-between; width: 10rem;">
+        <div style="display: flex; justify-content: space-between; width: 18rem;">
             <p><%= event.start.date %></p>
             <p><%= event.summary %></p>
             <p><%= event.description %></p>
