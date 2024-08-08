@@ -113,14 +113,14 @@
 
     <button onclick="toggleDebug()" class="submit-button" type="button" style="color: lightgray; font-size: 10px;">Debug</button>
 
-    <div id="events-debug" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey;">
+    <div id="events-debug" style="display: none; font-family: 'Consolas'; position: absolute; bottom: 0; color: grey; width: 20rem">
         <%# Display events %>
         <% if (typeof data !== 'undefined') {
         for (var i = 0; i < data.length; i++) {
             var event = data[i]; %>
         <div style="display: flex; justify-content: space-between; width: 10rem;">
-            <p><%= event.start.date %>___</p>
-            <p><%= event.summary %>___</p>
+            <p><%= event.start.date %></p>
+            <p><%= event.summary %></p>
             <p><%= event.description %></p>
         </div>
         <% }
