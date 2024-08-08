@@ -17,23 +17,19 @@ const eventTimeTo = document.getElementById('event-time-to');
 // Generate
 window.onload = () => {
     try {
-        let cookies = document.cookie.split(';');
+        let yearStored = localStorage.getItem('year');
+        let monthStored = localStorage.getItem('month');
 
-        if (document.cookie.includes('year') && document.cookie.includes('month')) {
-            cookies.forEach(cookie => {
-                    if (cookie.includes('year')) year.value = parseInt(cookie.split('=')[1]);
-                    if (cookie.includes('month')) month.selectedIndex = parseInt(cookie.split('=')[1]) - 1;
-                }
-            );
-        } else throw "No cookies found";
-
-
+        if (yearStored && monthStored) {
+            year.value = yearStored;
+            month.selectedIndex = monthStored - 1;
+        }
+        else throw "No saved data found";
     } catch (e) {
-        console.log("There was an error with loading cookies\n\n" + e);
+        saveToLocalStorage('year', new Date().getFullYear().toString());
+        saveToLocalStorage('month', (parseInt(new Date().getMonth()) + 1).toString());
 
-        setCookie('year', new Date().getFullYear());
-        setCookie('month', parseInt(new Date().getMonth()) + 1);
-
+        console.log("There was an error with loading saved data:", e);
         //window.location.reload();
     }
 
@@ -43,13 +39,11 @@ window.onload = () => {
 
 
 // Set cookies
-function setCookie(name, value) {
+function saveToLocalStorage(name, value) {
     try {
-        let date = new Date(year.value, month.value, 2);
-
-        document.cookie = name + '=' + value + '; expires=' + date.toUTCString();
+        localStorage.setItem(name, value);
     } catch (e) {
-        console.log("There was an error with setting cookies\n\n" + e);
+        console.log("There was an error with saving data:", e);
     }
 }
 
@@ -57,12 +51,12 @@ function setCookie(name, value) {
 // Subbmision
 function dateSelectionSubmit() {
     try {
-        setCookie('year', year.value);
-        setCookie('month', month.value);
+        saveToLocalStorage('year', year.value);
+        saveToLocalStorage('month', month.selectedIndex + 1);
 
         document.getElementById('event-select').submit();
     } catch (e) {
-        console.log("There was an error with selecting date\n\n" + e);
+        console.log("There was an error with selecting date:", e);
     }
 
 }
