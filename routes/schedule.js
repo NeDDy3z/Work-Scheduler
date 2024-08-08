@@ -49,7 +49,7 @@ router.get('/', isAuthenticated, authentication.ensureAuthenticated, async (req,
 
         res.status(200).render('pages/schedule', {data: data});
     } catch (e) {
-        res.status(500).send("Internal server error");
+        res.status(500).send("Internal server error", e);
         console.log(e);
     }
 });
@@ -65,7 +65,7 @@ router.post('/event/add', isAuthenticated, authentication.ensureAuthenticated, a
         }, 750);
 
     } catch (e) {
-        res.status(500).send("Internal server error");
+        res.status(500).send("Internal server error", e);
         console.log(e);
     }
 });
@@ -80,7 +80,7 @@ router.post('/event/delete', isAuthenticated, authentication.ensureAuthenticated
             res.status(200).redirect('/schedule');
         }, 250);
     } catch (e) {
-        res.status(500).send("Internal server error");
+        res.status(500).send("Internal server error", e);
         console.log(e);
     }
 });
@@ -98,7 +98,7 @@ router.post('/event/update', isAuthenticated, authentication.ensureAuthenticated
             res.status(200).redirect('/schedule');
         }, 750);
     } catch (e) {
-        res.status(500).send("Internal server error");
+        res.status(500).send("Internal server error", e);
         console.log(e);
     }
 });

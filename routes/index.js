@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
         }
     } catch (e) {
         // Error => 500
-        res.status(500).send("Internal server error: "+ e);
+        res.status(500).send("Internal server error", e);
     }
 });
 
@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
         }
     } catch (e) {
         // Error => 500
-        res.status(500).send("Internal server error: "+ e);
+        res.status(500).send("Internal server error", e);
     }
 
 });
