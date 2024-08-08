@@ -55,7 +55,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 
         res.redirect(authUrl);
     } catch (e) {
-        res.status(500).send("Internal server error: "+ e);
+        res.status(500).send("Internal server error", e);
         res.redirect('/');
     }
 });
@@ -71,7 +71,7 @@ router.get('/oauth2callback', isAuthenticated, async (req, res) => {
 
         res.status(200).redirect('/schedule');
     } catch (e) {
-        res.status(500).send("Internal server error: "+ e);
+        res.status(500).send("Internal server error", e);
     }
 });
 
