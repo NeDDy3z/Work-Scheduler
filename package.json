@@ -14,7 +14,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "express-session": "^1.18.0",
     "gaxios": "^6.6.0",
     "google-auth": "^0.0.1",
